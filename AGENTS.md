@@ -13,4 +13,4 @@
 - Dependencies use stable compatible releases and committed lockfiles. Run typechecks, builds, PHP tests, browser scenarios and schema/migration guards appropriate to changes.
 - Production DB, SMTP, S3 and payment providers are not test targets. Tests use synthetic fixtures and fake adapters.
 
-- Each service builds from its own `ms/orbita-*` directory with its own dependency manifest and lockfile; no root npm workspace. Front/admin local packages are versioned snapshots. Keep shared contract changes consistent in both services; generate types with `npm --prefix scripts run generate:types`. Root Compose/.env are local orchestration only, production configuration belongs in `prod/<service>`.
+- Each service builds from its own `ms/orbita-*` directory with its own dependency manifest and lockfile; no root npm workspace. Front/admin local packages are versioned snapshots. Keep shared contract changes consistent in both services; generate types with `npm --prefix scripts run generate:types`. Local Compose/.env belong in docker/local/ (use scripts/local.sh); keep the repository root free of environment files, production configuration belongs in `prod/<service>`.

@@ -35,7 +35,7 @@ def prepare(path: Path, template: Path) -> None:
 if __name__ == '__main__':
     root = Path(__file__).resolve().parents[1]
     try:
-        prepare(root / '.env', root / '.env.example')
+        prepare(root / 'docker/local/.env', root / 'docker/local/.env.example')
     except ValueError as error:
         raise SystemExit(str(error)) from None
-    print('Local .env prepared; existing keys preserved.')
+    print('Local docker/local/.env prepared; existing keys preserved.')

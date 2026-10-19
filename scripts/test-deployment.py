@@ -45,6 +45,7 @@ def main():
             (folder / '.env').write_text('ORIGIN=https://other.example.test\nAPP_URL=https://other.example.test\n')
             changed = json.loads(subprocess.check_output(['docker', 'compose', '--project-directory', str(folder), '--env-file', str(folder / '.env'), 'config', '--format', 'json'], cwd=base, env=env, text=True))
             assert changed['services']['app']['environment']['ORBITA_API_ORIGIN_INTERNAL'] == 'https://other.example.test'
+            assert changed['services']['app']['tmpfs'] == ['/tmp:rw,noexec,nosuid,nodev,mode=1777']
         print('PASS independent runtime/migration credentials; CA mounts; SSR follows configured domain')
 
         binary = base / 'bin'
@@ -56,6 +57,9 @@ import json,os,sys
 from pathlib import Path
 args=sys.argv[1:]
 with open(os.environ['COMMAND_LOG'],'a') as f: f.write(json.dumps({'args':args,'cwd':str(Path.cwd()),'profiles':os.environ.get('COMPOSE_PROFILES'),'env_file':os.environ.get('ORBITA_PROD_ENV_FILE')})+'\\n')
+if args == ['context', 'show']:
+    print('desktop-linux')
+    sys.exit(0)
 mode=os.environ.get('FAIL_COMMAND')
 if mode in args: sys.exit(17)
 if 'orbita:catalog-inspect' in args:
@@ -73,7 +77,13 @@ if args[-1:] == ['db'] and 'run' in args: Path(os.environ['APPLIED']).touch()
             if fail: active['FAIL_COMMAND'] = fail
             result = subprocess.run(['bash', str(project / path), *args], cwd=base, env=active, capture_output=True, text=True)
             assert (result.returncode != 0) if fail else (result.returncode == 0), result.stderr
-            return [json.loads(line) for line in log.read_text().splitlines()]
+            return [call for line in log.read_text().splitlines() if (call := json.loads(line))['args'] != ['context', 'show']]
+
+        front_calls = run('deploy/front.sh')
+        assert front_calls[-1]['args'] == ['push', 'larux/orbita-front:latest']
+        assert front_calls[0]['args'][-1] == 'ms/orbita-front'
+        assert len(run('deploy/front.sh', '--no-push')) == 1
+        assert len(run('deploy/front.sh', fail='build')) == 1
 
         calls = run('deploy/db.sh')
         assert [c['args'][0] for c in calls] == ['build', 'build', 'push']
@@ -83,6 +93,8 @@ if args[-1:] == ['db'] and 'run' in args: Path(os.environ['APPLIED']).touch()
         assert len(builds) == 4
         for call in builds:
             args = call['args']
+            assert args[args.index('--builder') + 1] == 'desktop-linux', args
+            assert '--load' in args, args
             context = args[-1]
             assert context.startswith('ms/orbita-'), args
             assert args[args.index('-f') + 1] == context + '/Dockerfile.production', args

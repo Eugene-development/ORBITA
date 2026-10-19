@@ -4,7 +4,7 @@
 
 ## Структура
 
-`ms/orbita-front` — публичный сайт; `ms/orbita-admin` — `/admin`; `ms/orbita-api` — модульный монолит. `ms/orbita-db` содержит только снимок каталога и служебные миграции. Каждый Node-сервис содержит собственные `package.json`, `package-lock.json`, `Dockerfile.production` и локальные пакеты `packages/ui`, `packages/contracts`. Сборка не требует корневого npm workspace или исходников соседнего сервиса. `scripts/package.json` содержит только инструменты генерации и сквозных тестов. Корневые `.env` и `compose.yaml` обслуживают совместное локальное окружение, как в OTZOVIK и PLITKA; production-настройки находятся в `prod/<сервис>/`. Инфраструктура повторяет поддерживаемые соглашения PLITKA.
+`ms/orbita-front` — публичный сайт; `ms/orbita-admin` — `/admin`; `ms/orbita-api` — модульный монолит. `ms/orbita-db` содержит только снимок каталога и служебные миграции. Каждый Node-сервис содержит собственные `package.json`, `package-lock.json`, `Dockerfile.production` и локальные пакеты `packages/ui`, `packages/contracts`. Сборка не требует корневого npm workspace или исходников соседнего сервиса. `scripts/package.json` содержит только инструменты генерации и сквозных тестов. Файлы локального окружения находятся в `docker/local/`; production-настройки находятся в `prod/<сервис>/`. Инфраструктура повторяет поддерживаемые соглашения PLITKA.
 
 ## Локальный запуск
 
@@ -13,15 +13,15 @@
 ```sh
 bash scripts/setup.sh
 bash scripts/build.sh local
-docker compose up -d --wait mysql redis mailpit
+bash scripts/local.sh up -d --wait mysql redis mailpit
 bash scripts/migrate-services.sh local
-docker compose up -d --wait
+bash scripts/local.sh up -d --wait
 ```
 
 После служебных миграций назначить сотрудника (пароль запрашивается скрыто):
 
 ```sh
-docker compose exec api php artisan orbita:employee admin@example.test --name='Администратор' --role=admin
+bash scripts/local.sh exec api php artisan orbita:employee admin@example.test --name='Администратор' --role=admin
 ```
 
 Сайт: `http://127.0.0.1:4151`, админка: `/admin`, локальные письма: `http://127.0.0.1:4154`.

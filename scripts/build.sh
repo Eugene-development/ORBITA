@@ -6,7 +6,7 @@ selected_service=""
 push=true
 for argument in "$@"; do
  case "$argument" in
-  local) exec docker compose build api front admin ;;
+  local) exec bash scripts/local.sh build api front admin ;;
   --push) push=true ;;
   --no-push) push=false ;;
   api|db|front|admin)
@@ -16,10 +16,11 @@ for argument in "$@"; do
  esac
 done
 if [[ -n "$selected_service" ]]; then services=("$selected_service"); fi
+build_context=$(docker context show)
 python3 scripts/check-migrations.py
 api_built=false
 build_api() {
- docker build --platform "${PLATFORM:-linux/amd64}" --target production -t larux/orbita-api:latest -f ms/orbita-api/Dockerfile.production ms/orbita-api
+ docker build --builder "$build_context" --load --platform "${PLATFORM:-linux/amd64}" --target production -t larux/orbita-api:latest -f ms/orbita-api/Dockerfile.production ms/orbita-api
  api_built=true
 }
 for service in "${services[@]}"; do
@@ -27,8 +28,8 @@ for service in "${services[@]}"; do
  case "$service" in
   api) build_api ;;
   db) if [[ "$api_built" != true ]]; then build_api; fi
-      docker build --platform "${PLATFORM:-linux/amd64}" -t "$image" -f ms/orbita-db/Dockerfile.production ms/orbita-db ;;
-  *) docker build --platform "${PLATFORM:-linux/amd64}" -t "$image" -f "ms/orbita-$service/Dockerfile.production" "ms/orbita-$service" ;;
+      docker build --builder "$build_context" --load --platform "${PLATFORM:-linux/amd64}" -t "$image" -f ms/orbita-db/Dockerfile.production ms/orbita-db ;;
+  *) docker build --builder "$build_context" --load --platform "${PLATFORM:-linux/amd64}" -t "$image" -f "ms/orbita-$service/Dockerfile.production" "ms/orbita-$service" ;;
  esac
  if [[ "$push" == true ]]; then docker push "$image"; fi
 done

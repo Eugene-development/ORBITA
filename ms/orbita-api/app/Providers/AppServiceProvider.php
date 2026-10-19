@@ -4,6 +4,7 @@ use App\Modules\Auth\EmployeeCommand;
 use App\Modules\Catalog\Models;
 use App\Modules\Schema\CatalogApproveCommand;
 use App\Modules\Schema\CatalogInspectCommand;
+use App\Modules\Recovery\RecoveryImportCommand;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -34,6 +35,6 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('employee-login', fn (Request $request) => [Limit::perMinute(5)->by(mb_strtolower((string) $request->input('email')).'|'.$request->ip()), Limit::perMinute(30)->by($request->ip())]);
         ResetPassword::createUrlUsing(fn ($user, $token) => rtrim(config('app.url'), '/').'/admin/reset-password?'.http_build_query(['token' => $token, 'email' => $user->email]));
         $this->loadMigrationsFrom(base_path('../orbita-db/database/migrations'));
-        $this->commands([EmployeeCommand::class, CatalogInspectCommand::class, CatalogApproveCommand::class]);
+        $this->commands([EmployeeCommand::class, CatalogInspectCommand::class, CatalogApproveCommand::class, RecoveryImportCommand::class]);
     }
 }

@@ -8,9 +8,9 @@ from pathlib import Path
 import sys
 sys.path.insert(0, 'scripts')
 from env_config import read_env
-env=read_env(Path('.env'))
+env=read_env(Path('docker/local/.env'))
 assert env.get('APP_ENV')=='local' and env.get('DB_HOST')=='mysql' and env.get('DB_DATABASE','').endswith('_local'), 'Import is restricted to isolated local DB.'
 PY
 python3 scripts/check-schema-export.py "$file"
-docker compose exec -T mysql sh -c 'MYSQL_PWD="$MYSQL_PASSWORD" exec mysql -u "$MYSQL_USER" "$MYSQL_DATABASE"' < "$file"
+bash scripts/local.sh exec -T mysql sh -c 'MYSQL_PWD="$MYSQL_PASSWORD" exec mysql -u "$MYSQL_USER" "$MYSQL_DATABASE"' < "$file"
 echo 'Schema imported into isolated local DB. Catalog writes remain disabled.'

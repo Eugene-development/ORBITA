@@ -35,6 +35,7 @@ docker login
 ./deploy/front.sh --no-push
 ```
 
+Сборка использует встроенный Docker builder текущего context (`--builder "$(docker context show)"`) и явно загружает образ (`--load`) перед `docker push`; выбранный пользовательский buildx-builder не влияет на этот сценарий.
 Сборка рассчитана на `linux/amd64`; при необходимости задайте `PLATFORM`.
 Образ db основан на `larux/orbita-api:latest`. При отдельном `deploy/db.sh`
 API сначала собирается из текущих исходников локально, затем собирается db;

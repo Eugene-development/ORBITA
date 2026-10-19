@@ -30,10 +30,10 @@ services:
     ports: ["127.0.0.1:${MAILPIT_PORT:-4154}:8025"]
   api:
     <<: *api
-    build: {context: ./ms/orbita-api, dockerfile: Dockerfile.production, target: development}
+    build: {context: ../../ms/orbita-api, dockerfile: Dockerfile.production, target: development}
     volumes:
       - local_media:/var/www/storage/app/public
-      - ./ms/orbita-db/database/schema:/schema:ro
+      - ../../ms/orbita-db/database/schema:/schema:ro
   worker:
     <<: *api
     command: [php, artisan, orbita:outbox-work, --sleep=3]
@@ -45,12 +45,12 @@ services:
     profiles: [tools]
     restart: 'no'
     volumes:
-      - ./ms/orbita-db/database/migrations:/migrations:ro
-      - ./ms/orbita-db/database/schema:/schema:ro
+      - ../../ms/orbita-db/database/migrations:/migrations:ro
+      - ../../ms/orbita-db/database/schema:/schema:ro
     command: [php, artisan, migrate, --path=/migrations, --realpath]
   front:
     image: orbita/front:local
-    build: {context: ./ms/orbita-front, dockerfile: Dockerfile.production}
+    build: {context: ../../ms/orbita-front, dockerfile: Dockerfile.production}
     environment:
       APP_ENV: local
       ORIGIN: ${ORIGIN:-http://127.0.0.1:4151}
@@ -64,7 +64,7 @@ services:
     restart: unless-stopped
   admin:
     image: orbita/admin:local
-    build: {context: ./ms/orbita-admin, dockerfile: Dockerfile.production}
+    build: {context: ../../ms/orbita-admin, dockerfile: Dockerfile.production}
     environment:
       APP_ENV: local
       ORIGIN: ${ORIGIN:-http://127.0.0.1:4151}
@@ -74,7 +74,7 @@ services:
   gateway:
     image: nginx:1.28-alpine
     ports: ["127.0.0.1:${WEB_PORT:-4151}:80"]
-    volumes: ["./docker/nginx/local.conf:/etc/nginx/conf.d/default.conf:ro"]
+    volumes: ["../nginx/local.conf:/etc/nginx/conf.d/default.conf:ro"]
     depends_on: [api, front, admin]
     healthcheck:
       test: [CMD-SHELL, 'wget -qO- http://127.0.0.1/health && wget -qO- http://127.0.0.1/admin/health']

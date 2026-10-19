@@ -1,0 +1,4 @@
+ARG ORBITA_API_IMAGE=larux/orbita-api:latest
+FROM ${ORBITA_API_IMAGE}
+COPY --chown=www-data:www-data database/migrations /migrations
+CMD ["php", "artisan", "migrate", "--path=/migrations", "--realpath", "--force"]

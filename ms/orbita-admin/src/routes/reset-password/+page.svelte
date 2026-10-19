@@ -1,0 +1,7 @@
+<script lang="ts">
+  import { page } from '$app/state'; import { request } from '#lib/api.ts';
+  let password = $state(''); let confirmation = $state(''); let pending = $state(false); let message = $state(''); let success = $state(false);
+  async function reset(e: SubmitEvent) { e.preventDefault(); pending = true; try { await request('/auth/password/reset', { method: 'POST', body: JSON.stringify({ email: page.url.searchParams.get('email'), token: page.url.searchParams.get('token'), password, password_confirmation: confirmation }) }); success = true; message = 'Пароль обновлён. Войдите с новым паролем.'; } catch (e) { message = (e as Error).message; } finally { pending = false; } }
+</script>
+<svelte:head><title>Новый пароль — Орбита-строй</title></svelte:head>
+<main class="container max-w-md py-20"><h1 class="text-3xl font-bold">Новый пароль</h1><form class="card mt-8 space-y-5" onsubmit={reset}>{#if message}<p role="status" class="notice">{message}</p>{/if}{#if !success}<div><label class="label" for="password">Пароль</label><input class="field" id="password" type="password" autocomplete="new-password" minlength="12" required bind:value={password}/></div><div><label class="label" for="confirmation">Повторите пароль</label><input class="field" id="confirmation" type="password" autocomplete="new-password" required bind:value={confirmation}/></div><button class="button" disabled={pending}>{pending ? 'Сохраняем…' : 'Сохранить пароль'}</button>{/if}</form><a class="mt-6 inline-block text-brand underline" href="/admin/login">Войти</a></main>

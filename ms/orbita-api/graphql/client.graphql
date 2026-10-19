@@ -1,0 +1,209 @@
+type Catalog {
+  id: ID!
+  key: String!
+  rubric: [Rubric!]!
+  slug: String
+  text: [Text!]!
+  value: String!
+}
+
+type Category {
+  id: ID!
+  key: String!
+  parentable: Parentable
+  product: [Product!]!
+  seoDescription: SeoDescription
+  seoTitle: SeoTitle
+  slug: String
+  text: [Text!]!
+  value: String!
+}
+
+input ContentInput {
+  id: ID
+  slug: String
+  value: String!
+}
+
+scalar Decimal
+
+type Image {
+  alt: String
+  hash: String!
+  id: ID!
+  key: String!
+  url: String
+}
+
+type Mutation {
+  archiveProduct(id: ID!): Product!
+  createProduct(input: ProductInput!): Product!
+  restoreProduct(id: ID!): Product!
+  updateProduct(id: ID!, input: ProductInput!): Product!
+}
+
+"Allows ordering a list of records."
+input OrderByClause {
+  "The column that is used for ordering."
+  column: String!
+
+  "The direction that is used for ordering."
+  order: SortOrder!
+}
+
+"Aggregate functions when ordering by a relation without specifying a column."
+enum OrderByRelationAggregateFunction {
+  "Amount of items."
+  COUNT
+}
+
+"Aggregate functions when ordering by a relation that may specify a column."
+enum OrderByRelationWithColumnAggregateFunction {
+  "Average."
+  AVG
+
+  "Amount of items."
+  COUNT
+
+  "Maximum."
+  MAX
+
+  "Minimum."
+  MIN
+
+  "Sum."
+  SUM
+}
+
+type PaginatorInfo {
+  currentPage: Int!
+  hasMorePages: Boolean!
+  lastPage: Int!
+  total: Int!
+}
+
+union Parentable = Catalog | Rubric | Category | Product
+
+type Price {
+  id: ID!
+  key: String!
+  value: Decimal!
+}
+
+type Product {
+  categoryId: ID
+  id: ID!
+  image: Image
+  is_active: Boolean!
+  key: String!
+  parentable: Parentable
+  price: Price
+  property: [Property!]!
+  slug: String
+  text: [Text!]!
+  unit: Unit
+  value: String!
+}
+
+input ProductInput {
+  categoryId: ID!
+  imageAlt: String
+  imageHash: String
+  is_active: Boolean
+  price: Decimal!
+  properties: [ContentInput!]
+  slug: String!
+  texts: [ContentInput!]
+  unit: String!
+  value: String!
+}
+
+type ProductPage {
+  data: [Product!]!
+  paginatorInfo: PaginatorInfo!
+}
+
+type Property {
+  id: ID!
+  key: String!
+  slug: String
+  value: String!
+}
+
+type Query {
+  adminProduct(id: ID!): Product
+  adminProducts(categoryId: ID, first: Int = 24, page: Int = 1, search: String, status: Boolean): ProductPage!
+  catalog(key: String): [Catalog!]!
+  catalog_one(key: String, slug: String!): Catalog
+  category_one(key: String, slug: String!): Category
+  productIds(ids: [ID!]!): [Product!]!
+  product_one(key: String, slug: String!): Product
+  products(categoryId: ID, first: Int = 24, page: Int = 1, search: String): ProductPage!
+  referenceData: ReferenceData!
+  rubric_one(key: String, slug: String!): Rubric
+}
+
+type ReferenceData {
+  catalogWritesEnabled: Boolean!
+  categories: [Category!]!
+  units: [UnitReference!]!
+}
+
+type Rubric {
+  category: [Category!]!
+  id: ID!
+  key: String!
+  parentable: Parentable
+  slug: String
+  text: [Text!]!
+  value: String!
+}
+
+type SeoDescription {
+  id: ID!
+  value: String
+}
+
+type SeoTitle {
+  id: ID!
+  value: String
+}
+
+"Directions for ordering a list of records."
+enum SortOrder {
+  "Sort records in ascending order."
+  ASC
+
+  "Sort records in descending order."
+  DESC
+}
+
+type Text {
+  id: ID!
+  key: String!
+  slug: String
+  value: String!
+}
+
+"Specify if you want to include or exclude trashed results from a query."
+enum Trashed {
+  "Only return trashed results."
+  ONLY
+
+  "Return both trashed and non-trashed results."
+  WITH
+
+  "Only return non-trashed results."
+  WITHOUT
+}
+
+type Unit {
+  id: ID!
+  key: String!
+  value: String!
+}
+
+type UnitReference {
+  value: String!
+}
+

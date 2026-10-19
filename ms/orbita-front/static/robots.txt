@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /shop/cart
+Disallow: /spasibo
+Clean-param: id
+Clean-param: etext

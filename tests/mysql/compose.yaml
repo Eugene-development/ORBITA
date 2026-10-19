@@ -1,0 +1,13 @@
+name: orbita-isolated-tests
+services:
+  mysql:
+    image: mysql:8.4
+    # Standalone disposable fixture: trigger regressions need no replication/binlog.
+    command: [--skip-log-bin]
+    env_file: ../../runtime/mysql-test.env
+    ports: ["127.0.0.1:4155:3306"]
+    tmpfs: [/var/lib/mysql]
+    healthcheck:
+      test: [CMD-SHELL, 'mysqladmin ping --protocol=TCP -h 127.0.0.1 -u root -p"$$MYSQL_ROOT_PASSWORD" --silent']
+      interval: 3s
+      retries: 40

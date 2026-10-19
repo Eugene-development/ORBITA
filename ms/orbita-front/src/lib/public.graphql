@@ -1,0 +1,26 @@
+fragment OrbitaPublicProductFields on Product {
+  id value slug is_active
+  price { value }
+  unit { value }
+  image { hash alt url }
+  text { key value }
+  property { id slug value }
+  parentable {
+    ... on Category {
+      id value slug
+      parentable { ... on Rubric { id value slug parentable { ... on Catalog { id value slug } } } }
+    }
+  }
+}
+query OrbitaPublicProducts($search: String, $categoryId: ID, $page: Int, $first: Int) {
+  products(search: $search, categoryId: $categoryId, page: $page, first: $first) {
+    data { ...OrbitaPublicProductFields }
+    paginatorInfo { currentPage lastPage total hasMorePages }
+  }
+}
+query OrbitaPublicProduct($slug: String!) { product_one(slug: $slug, key: "1") { ...OrbitaPublicProductFields } }
+query OrbitaPublicProductIds($ids: [ID!]!) { productIds(ids: $ids) { ...OrbitaPublicProductFields } }
+query OrbitaPublicCatalog { catalog(key: "1") { id value slug rubric { id value slug category { id value slug } } } }
+query OrbitaPublicCatalogOne($slug: String!) { catalog_one(slug: $slug, key: "1") { id value slug text { key value } rubric { id value slug category { id value slug } } } }
+query OrbitaPublicRubricOne($slug: String!) { rubric_one(slug: $slug, key: "1") { id value slug text { key value } category { id value slug } parentable { ... on Catalog { id value slug } } } }
+query OrbitaPublicCategoryOne($slug: String!) { category_one(slug: $slug, key: "1") { id value slug text { key value } parentable { ... on Rubric { id value slug parentable { ... on Catalog { id value slug } } } } } }

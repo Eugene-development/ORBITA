@@ -1,0 +1,22 @@
+{
+  "name": "orbita-tools",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "test": "node --test ../tests/unit/*.test.mjs",
+    "test:e2e": "playwright test",
+    "generate:types": "node generate-types.mjs"
+  },
+  "devDependencies": {
+    "@graphql-codegen/typescript": "^5.0.0",
+    "@graphql-codegen/typescript-operations": "^5.0.0",
+    "@playwright/test": "^1.63.0",
+    "graphql": "^16.11.0",
+    "svelte": "^5.57.1",
+    "typescript": "^6.0.0",
+    "@graphql-codegen/core": "^6.2.1"
+  }
+}

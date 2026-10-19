@@ -1,0 +1,11 @@
+<script lang="ts">
+  import { onMount } from 'svelte';
+  import { page } from '$app/state';
+  import type { Order } from '#lib/types.ts';
+  import { displayMoney } from '#lib/cart-utils.ts';
+  let order = $state<Order | null>(null), failure = $state(''), loading = $state(true);
+  async function refresh() { loading = true; failure = ''; const id = page.url.searchParams.get('order') ?? sessionStorage.getItem('orbita:last-order'); if (!id) { loading = false; return; } try { const response = await fetch(`/api/orders/${encodeURIComponent(id)}`, { credentials: 'same-origin', headers: { Accept: 'application/json' } }); if (!response.ok) throw new Error('Не удалось проверить заказ. Сохраните номер и свяжитесь с менеджером.'); order = await response.json(); } catch (error) { failure = error instanceof Error ? error.message : 'Не удалось проверить заказ.'; } finally { loading = false; } }
+  onMount(() => { refresh(); });
+</script>
+<svelte:head><title>Заказ — Орбита-Строй</title><meta name="robots" content="noindex" /></svelte:head>
+<section class="container page-section order-result"><div class="order-result-card"><h1>{order ? 'Спасибо за доверие!' : 'Информация о заказе'}</h1>{#if loading}<p role="status">Проверяем статус заказа…</p>{:else if failure}<p role="alert">{failure}</p><button class="button-secondary" type="button" onclick={refresh}>Проверить снова</button>{:else if order}<p>Заказ № {order.id} создан. В ближайшее время с вами свяжется наш специалист.</p><dl><div><dt>Сумма</dt><dd>{displayMoney(order.total)}</dd></div><div><dt>Оплата</dt><dd>{order.paymentStatus === 'paid' ? 'Оплачено' : order.paymentStatus === 'pending' ? 'Ожидает подтверждения' : 'По согласованию с менеджером'}</dd></div></dl>{#if order.confirmationUrl && order.paymentStatus !== 'paid'}<a class="button-secondary" href={order.confirmationUrl}>Перейти к оплате</a>{/if}<button class="button-secondary" type="button" onclick={refresh}>Обновить статус</button>{:else}<p>После оформления заказа здесь появится его статус. Если вы уже отправили заказ, свяжитесь с менеджером: <a href="tel:+79023033654">8 (902) 303-36-54</a>.</p>{/if}<a class="button" href="/">Вернуться на главную страницу</a></div></section>

@@ -1,0 +1,6 @@
+{
+  "extends": "$app/tsconfig",
+  "compilerOptions": { "allowJs": true, "checkJs": true, "strict": true, "moduleResolution": "bundler", "resolveJsonModule": true, "allowImportingTsExtensions": true, "noEmit": true },
+  "include": ["src", "test", "*.ts"],
+  "exclude": ["src/service-worker"]
+}

@@ -1,0 +1,20 @@
+import { mkdir, writeFile } from 'node:fs/promises';
+import { spawn, execFileSync } from 'node:child_process';
+import { randomBytes } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+const root=fileURLToPath(new URL('../',import.meta.url));
+const api=fileURLToPath(new URL('../ms/orbita-api',import.meta.url));
+await mkdir(new URL('../runtime',import.meta.url),{recursive:true});
+const iniDirectory=root+'runtime/php-config';
+await mkdir(iniDirectory,{recursive:true});
+await writeFile(iniDirectory+'/orbita-upload.ini','upload_max_filesize=10M\npost_max_size=12M\n');
+const originalScanDirectory=process.env.PHP_INI_SCAN_DIR || execFileSync('php',['-r','echo PHP_CONFIG_FILE_SCAN_DIR;'],{encoding:'utf8'});
+const env={...process.env,ORBITA_E2E:'1',APP_ENV:'testing',APP_DEBUG:'false',APP_KEY:'base64:'+randomBytes(32).toString('base64'),APP_URL:'http://127.0.0.1:4151',DB_CONNECTION:'sqlite',DB_DATABASE:root+'runtime/e2e.sqlite',SESSION_DRIVER:'file',SESSION_SECURE_COOKIE:'false',CACHE_STORE:'array',QUEUE_CONNECTION:'sync',MAIL_MAILER:'log',LOG_CHANNEL:'stderr',LOG_LEVEL:'critical',MEDIA_UPLOADS_ENABLED:'true',ORBITA_MEDIA_DISK:'local',ORBITA_CATALOG_WRITES_ENABLED:'true',ORBITA_WRITERS_COORDINATED:'true',ORDER_MANAGER_EMAIL:'manager@example.test',PAYMENTS_ENABLED:'false',PAYMENT_DRIVER:'dummy'};
+const result=JSON.parse(execFileSync('php',[root+'scripts/e2e/prepare-api.php'],{cwd:api,env,encoding:'utf8'}));
+env.PHP_INI_SCAN_DIR=originalScanDirectory+':'+iniDirectory;
+env.ORBITA_SCHEMA_FINGERPRINT=result.fingerprint;
+env.APP_ENV='local'; // Browser requests exercise real session/CSRF middleware.
+await writeFile(new URL('../runtime/e2e-config.json',import.meta.url),JSON.stringify({database:env.DB_DATABASE,fingerprint:result.fingerprint}),{mode:0o600});
+const child=spawn('php',['artisan','serve','--host=127.0.0.1','--port=4157','--no-reload'],{cwd:api,env,stdio:'inherit'});
+for(const signal of ['SIGINT','SIGTERM']) process.on(signal,()=>child.kill(signal));
+child.on('exit',code=>process.exit(code??0));

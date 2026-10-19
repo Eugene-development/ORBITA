@@ -1,0 +1,9 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync, existsSync } from 'node:fs';
+const root = new URL('../', import.meta.url);
+const read = (path: string) => readFileSync(new URL(path, root), 'utf8');
+test('all 18 old blog URLs have complete preserved articles', () => { const blog = JSON.parse(read('src/lib/content/blog.json')); assert.equal(blog.posts.length, 18); for (let id = 1; id <= 18; id++) { const article = blog.articles[String(id)]; assert.ok(article?.title && article.description && article.html.includes('<h1')); assert.ok(!article.html.includes('<script')); } });
+test('informational pages preserve existing content and empty pages without invented facts', () => { const pages = JSON.parse(read('src/lib/content/pages.json')); for (const slug of ['payment','delivery','movers','documents','guarantees','price','certificates','partner','testimonials','about','contact']) assert.ok(pages[slug]?.html && pages[slug].title && pages[slug].description); for (const slug of ['documents','guarantees','price','certificates']) assert.ok(pages[slug].html.includes('Страница в разработке')); });
+test('legacy route families remain available without obsolete client token code', () => { for (const path of ['about','contact','blog','blog/post/[id]','information/[slug]','shop/rubric/[slug]','shop/category/[slug]','shop/products/[slug]','shop/product/[slug]','shop/cart','shop/discount','shop/sale','spasibo']) assert.ok(existsSync(new URL(`src/routes/${path}/+page.svelte`,root)),path); assert.ok(!read('src/lib/api.ts').includes('VITE_TOKEN')); assert.ok(!read('src/routes/+layout.svelte').includes("removeItem('inCart')")); });
+test('raw contact HTML closes its iframe so following footer and hydration scripts remain outside the map', () => { const { contact } = JSON.parse(read('src/lib/content/pages.json')); assert.ok(contact.html.includes('</iframe>')); assert.ok(!/<iframe[^>]*\/\s*>/s.test(contact.html)); });

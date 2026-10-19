@@ -1,0 +1,2 @@
+import { gql } from '#lib/server/api.ts'; import { REFERENCES } from '#lib/queries.ts'; import type { PageServerLoad } from './$types';
+export const load: PageServerLoad = async event => { try { return await gql<{referenceData:{categories:{id:string;value:string}[];units:{value:string}[];catalogWritesEnabled:boolean}}>(event, REFERENCES.replace('categories{','catalogWritesEnabled categories{')); } catch { return {referenceData:{categories:[],units:[],catalogWritesEnabled:false}}; } };

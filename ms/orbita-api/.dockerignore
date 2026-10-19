@@ -1,0 +1,9 @@
+.env
+.env.*
+!.env.example
+vendor
+storage/logs/*
+storage/framework/*
+bootstrap/cache/*.php
+*.sqlite
+.git

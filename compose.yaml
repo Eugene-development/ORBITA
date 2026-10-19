@@ -1,0 +1,86 @@
+name: orbita-local
+x-api: &api
+  image: orbita/api:local
+  env_file: .env
+  restart: unless-stopped
+  depends_on:
+    mysql: {condition: service_healthy}
+    redis: {condition: service_healthy}
+services:
+  mysql:
+    image: ${MYSQL_IMAGE:-mysql:8.4}
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-orbita_local}
+      MYSQL_USER: ${DB_USERNAME:-orbita_local}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Run scripts/setup.sh}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Run scripts/setup.sh}
+    ports: ["127.0.0.1:${MYSQL_PORT:-4153}:3306"]
+    volumes: [mysql_data:/var/lib/mysql]
+    healthcheck:
+      test: [CMD-SHELL, 'mysqladmin ping --protocol=TCP -h 127.0.0.1 -u root -p"$$MYSQL_ROOT_PASSWORD" --silent']
+      interval: 5s
+      retries: 30
+  redis:
+    image: redis:7-alpine
+    command: [redis-server, --appendonly, 'yes']
+    volumes: [redis_data:/data]
+    healthcheck: {test: [CMD, redis-cli, ping], interval: 5s, retries: 20}
+  mailpit:
+    image: axllent/mailpit:v1.29
+    ports: ["127.0.0.1:${MAILPIT_PORT:-4154}:8025"]
+  api:
+    <<: *api
+    build: {context: ./ms/orbita-api, dockerfile: Dockerfile.production, target: development}
+    volumes:
+      - local_media:/var/www/storage/app/public
+      - ./ms/orbita-db/database/schema:/schema:ro
+  worker:
+    <<: *api
+    command: [php, artisan, orbita:outbox-work, --sleep=3]
+  scheduler:
+    <<: *api
+    command: [php, artisan, schedule:work]
+  db:
+    <<: *api
+    profiles: [tools]
+    restart: 'no'
+    volumes:
+      - ./ms/orbita-db/database/migrations:/migrations:ro
+      - ./ms/orbita-db/database/schema:/schema:ro
+    command: [php, artisan, migrate, --path=/migrations, --realpath]
+  front:
+    image: orbita/front:local
+    build: {context: ./ms/orbita-front, dockerfile: Dockerfile.production}
+    environment:
+      APP_ENV: local
+      ORIGIN: ${ORIGIN:-http://127.0.0.1:4151}
+      ORBITA_API_URL_INTERNAL: http://gateway/graphql
+      ORBITA_API_PROXY: http://gateway
+      ORBITA_PUBLIC_URL: ${ORBITA_PUBLIC_URL:-http://127.0.0.1:4151}
+      ORBITA_IMAGE_URL: ${ORBITA_IMAGE_URL:-https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/}
+      ORBITA_DEMO: ${ORBITA_DEMO:-false}
+      ORBITA_ANALYTICS_ENABLED: "false"
+      ORBITA_ONLINE_PAYMENT_ENABLED: ${PAYMENTS_ENABLED:-false}
+    restart: unless-stopped
+  admin:
+    image: orbita/admin:local
+    build: {context: ./ms/orbita-admin, dockerfile: Dockerfile.production}
+    environment:
+      APP_ENV: local
+      ORIGIN: ${ORIGIN:-http://127.0.0.1:4151}
+      ORBITA_API_ORIGIN_INTERNAL: http://gateway
+      ORBITA_API_PROXY: http://gateway
+    restart: unless-stopped
+  gateway:
+    image: nginx:1.28-alpine
+    ports: ["127.0.0.1:${WEB_PORT:-4151}:80"]
+    volumes: ["./docker/nginx/local.conf:/etc/nginx/conf.d/default.conf:ro"]
+    depends_on: [api, front, admin]
+    healthcheck:
+      test: [CMD-SHELL, 'wget -qO- http://127.0.0.1/health && wget -qO- http://127.0.0.1/admin/health']
+      interval: 15s
+      retries: 10
+volumes:
+  mysql_data:
+  redis_data:
+  local_media:

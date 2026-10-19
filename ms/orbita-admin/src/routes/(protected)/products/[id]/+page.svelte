@@ -1,0 +1,3 @@
+<script lang="ts">import ProductEditor from '#lib/ProductEditor.svelte'; import type { PageData } from './$types'; let { data }: {data:PageData} = $props();</script>
+<svelte:head><title>{data.adminProduct.value} — Орбита-строй</title></svelte:head>
+<h1 class="text-3xl font-bold">Редактирование товара</h1><p class="mt-2 text-muted">ID {data.adminProduct.id}</p>{#if data.saved}<p role="status" class="notice mt-4">Карточка сохранена.</p>{/if}<ProductEditor product={data.adminProduct} categories={data.referenceData.categories} units={data.referenceData.units} writesEnabled={data.referenceData.catalogWritesEnabled}/>

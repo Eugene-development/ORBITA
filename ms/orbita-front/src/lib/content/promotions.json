@@ -1,0 +1,607 @@
+{
+  "homeProducts": [
+    {
+      "invoiceRow": 2,
+      "action": "Штукатурная смесь Кнауф Ротбанд белый Кубань, 30 кг",
+      "price": "545",
+      "unit": "шт",
+      "id": "436",
+      "link": "/shop/product/stukaturnaya-smes-knauf-rotband-belaya-30-kg",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/020_original.jpg"
+    },
+    {
+      "invoiceRow": 4,
+      "action": "Клей для плитки ЕК 3000, 25 кг",
+      "price": "412",
+      "unit": "меш",
+      "id": "267",
+      "link": "/shop/product/klei-dlya-plitki-ek-3000-25kg",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/EK-3000-UNIVERSAL.png"
+    },
+    {
+      "invoiceRow": 6,
+      "action": "Клей для плитки Ветонит Изи Фикс +, 25 кг",
+      "price": "422",
+      "unit": "шт",
+      "id": "2786",
+      "link": "/shop/product/klei-dlya-plitki-izi-fiks-plyus",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/9WEhGW6ZUShIjPn67MQzYGfHpIT9dAxpOxae6iT8.png"
+    },
+    {
+      "invoiceRow": 8,
+      "action": "Шпаклёвка ЕК K 200, 20 кг",
+      "price": "498",
+      "unit": "шт",
+      "id": "447",
+      "link": "/shop/product/spaklevka-gipsovaya-ek-k-200-20-kg",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/ek20025kg-500x500.jpg"
+    },
+    {
+      "invoiceRow": 9,
+      "action": "Штукатурная смесь ЕК TG 40, 30 кг",
+      "price": "449.64",
+      "unit": "меш",
+      "id": "431",
+      "link": "/shop/product/stukaturnaya-smes-ek-tg-40-30-kg",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/EK-TG40.png"
+    },
+    {
+      "invoiceRow": 14,
+      "action": "Пескобетон М-300 Престиж ECO, 25 кг",
+      "price": "172",
+      "unit": "шт",
+      "id": "473",
+      "link": "/shop/product/peskobeton-m-300-25-kg",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/%D0%BF%D0%B5%D1%81.jpg"
+    },
+    {
+      "invoiceRow": 16,
+      "action": "Плита ОСБ-3 Kronospan, 2500×1250×9 мм",
+      "price": "660",
+      "unit": "шт",
+      "id": "228",
+      "link": "/shop/product/plita-osb-3-250012509mm-kronospan-gost-vlagostoikaya",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/ilejI7dCV3zr72h4VudvlNrQLKBgHsrYwKd1HoAL.jpeg"
+    },
+    {
+      "invoiceRow": 20,
+      "action": "Профиль ПП Кнауф, 60/27, 3 м",
+      "price": "339",
+      "unit": "шт",
+      "id": "1548",
+      "link": "/shop/product/profil-potolocnyi-knauf-6027-tolshh-06-mm-3-m",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/fP6qERpplBYG9CRXINoXc23B3VBR8wQoH6W80cGC.jpeg"
+    },
+    {
+      "invoiceRow": 24,
+      "action": "Грунтовка ЕК G100, 10 л",
+      "price": "980",
+      "unit": "кан",
+      "id": "520",
+      "link": "/shop/product/gruntovka-universalnaya-koncentrirovannaya-ek-g100-10-l",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/EK-G100.png"
+    },
+    {
+      "invoiceRow": 29,
+      "action": "Клей для плитки Кнауф Флизенклебер, 25 кг",
+      "price": "461",
+      "unit": "меш",
+      "id": "307",
+      "link": "/shop/product/klei-dlya-plitki-knauf-flizenkleber-25-kg",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/%D1%84%D0%BB%D0%B8%D0%B7%D0%B5%D0%BD.webp"
+    },
+    {
+      "invoiceRow": 31,
+      "action": "Клей для плитки Юнис 3000 MAX, 25 кг",
+      "price": "470",
+      "unit": "шт",
+      "id": "2965",
+      "link": "/shop/product/kliei-dlia-plitki-iunis-3000-ma-kh-tolstosloinyi-25-kgh",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/0fc66aadfde42ad46846c2aa065c6c2a.jpg"
+    },
+    {
+      "invoiceRow": 32,
+      "action": "Штукатурка цементная Юнис Силин универсальная армированная, 25 кг",
+      "price": "410",
+      "unit": "шт",
+      "id": "2983",
+      "link": "/shop/product/shtukaturka-cementnaya-yunis-silin-univ-armir-25kg",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/jwzscn0qzr4tuqgsp5o1n4bbm9nki2j.jpg"
+    },
+    {
+      "invoiceRow": 43,
+      "action": "Утеплитель Роклайт, 1,2×0,6×0,1 м, 4,32 м², 0,432 м³",
+      "price": "1880",
+      "unit": "упак",
+      "id": "1662",
+      "link": "/shop/product/uteplitel-texnonikol-roklait-1200600100",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/whNvDxUcyWufgGuLY2WKRup2GuyM0aYoGGwBsZ3k.jpg"
+    },
+    {
+      "invoiceRow": 46,
+      "action": "Фанера 10 мм, сорт 3/4, 1,525×1,525 м",
+      "price": "1007",
+      "unit": "лист",
+      "id": "235",
+      "link": "/shop/product/fanera-10mm-sort-34-15251525",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/%D1%84%D0%B0%D0%BD%D0%B5%D1%80%D0%B0.jpg"
+    },
+    {
+      "invoiceRow": 66,
+      "action": "Цемент М500 Евроцемент Ц/А-П 42,5Н, 40 кг",
+      "price": "420",
+      "unit": "шт",
+      "id": "2810",
+      "link": "/shop/product/cement-m500-evrocement-40-kg",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/AdAW50jMkTFDo4nUhEaxZUdxUkShNu2kf6HS4cMo.png"
+    }
+  ],
+  "discountProducts": [
+    {
+      "invoiceRow": 1,
+      "price": "356",
+      "unit": "меш",
+      "id": "434",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/EK-TT30.png",
+      "value": "Штукатурная смесь ЕК TT 30 фасадная, 25 кг",
+      "href": "/shop/product/stukaturnaya-smes-ek-tt-30-fasadnaya-25-kg"
+    },
+    {
+      "invoiceRow": 7,
+      "price": "998",
+      "unit": "шт",
+      "id": "2984",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/shpaklevka-vetonit-lr-plus-20-kg.jpg",
+      "value": "Шпаклёвка Ветонит LR+, 20 кг",
+      "href": "/shop/product/shpaklevka-vetonit-lr-plus-20-kg"
+    },
+    {
+      "invoiceRow": 10,
+      "price": "335",
+      "unit": "шт",
+      "id": "2985",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/shtukaturnaya-smes-vetonit-tt-30-light-25-kg.png",
+      "value": "Штукатурная смесь Ветонит TT 30 лайт, 25 кг",
+      "href": "/shop/product/shtukaturnaya-smes-vetonit-tt-30-light-25-kg"
+    },
+    {
+      "invoiceRow": 11,
+      "price": "412",
+      "unit": "шт",
+      "id": "1501",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/rXeE9qQsn7EpDT15h34D1bj0Y7tMalVrKb2vtm7w.jpeg",
+      "value": "Штукатурная смесь Ветонит TT 40, 25 кг",
+      "href": "/shop/product/stukaturnaya-smes-tt-40-vetonit-25-kg"
+    },
+    {
+      "invoiceRow": 12,
+      "price": "1092",
+      "unit": "лист",
+      "id": "1015",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/o233615480a6fded9690ecb346.jpg",
+      "value": "Профлист С-10 оцинкованный, 1160×2000 мм",
+      "href": "/shop/product/profnastil-s-10-11602000-ocinkovannyi"
+    },
+    {
+      "invoiceRow": 13,
+      "price": "1635",
+      "unit": "шт",
+      "id": "1016",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/o233615480a6fded9690ecb346.jpg",
+      "value": "Профлист С-10 оцинкованный, 1160×3000 мм",
+      "href": "/shop/product/profnastil-s-10-11603000-045-ocinkovannyi"
+    },
+    {
+      "invoiceRow": 15,
+      "price": "575",
+      "unit": "шт",
+      "id": "2946",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/YBbav3JxXOKl8hYDTen6CzCa1TUlMBagzDxTXlFO.png",
+      "value": "Плита ОСБ-3 МУРОМ, 2500×1250×6 мм",
+      "href": "/shop/product/plita-osb-3-250012506mm-kronospan-gost-vlagostoykaya"
+    },
+    {
+      "invoiceRow": 17,
+      "price": "265",
+      "unit": "шт",
+      "id": "354",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/trotuarnaya-plitka-kompanii-tessera-foto.jpg",
+      "value": "Плита тротуарная полимерпесчаная зелёная, 45×45×3 см",
+      "href": "/shop/product/plita-trotuarnaya-polimernopescanaya-cvet-zelenyi-koricnevyi-krasnyi"
+    },
+    {
+      "invoiceRow": 18,
+      "price": "111",
+      "unit": "шт",
+      "id": "356",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/2728.jpg",
+      "value": "Профиль ПН 27/28, 3 м, толщина 0,5 мм",
+      "href": "/shop/product/profil-napravlyayushhii-2728-tolshh-05-mm-3-m"
+    },
+    {
+      "invoiceRow": 19,
+      "price": "232",
+      "unit": "шт",
+      "id": "2961",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/profil-potolochnyj-napravlyayuschij-knauf-27h28-izomaxx-1000x1000.png",
+      "value": "Профиль ПН Кнауф, 27×28×3000 мм",
+      "href": "/shop/product/knauf-profil-napravlaushii-27x28"
+    },
+    {
+      "invoiceRow": 21,
+      "price": "157",
+      "unit": "шт",
+      "id": "365",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/6027.jpg",
+      "value": "Профиль ПП 60/27, 3 м",
+      "href": "/shop/product/profil-potolocnyi-6027-tolshh-05-mm-3-m"
+    },
+    {
+      "invoiceRow": 22,
+      "price": "2226",
+      "unit": "шт",
+      "id": "1415",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/3295_praymer-bitumnyy-gotovyy-a.jpg",
+      "value": "Праймер битумный готовый Альфатехмаст, 20 л",
+      "href": "/shop/product/praimer-bitumnyi-gotovyi-alfatexmast-20-l"
+    },
+    {
+      "invoiceRow": 25,
+      "price": "676",
+      "unit": "кан",
+      "id": "522",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/EK-G200.png",
+      "value": "Грунтовка ЕК G200, 10 л",
+      "href": "/shop/product/gruntovka-universalnaya-ek-g200-10-l"
+    },
+    {
+      "invoiceRow": 28,
+      "price": "641",
+      "unit": "шт",
+      "id": "1555",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/cjuEmWLbRA2D3EmcoEz0gvL5dZOu4RBO0bsVdOdf.jpeg",
+      "value": "Клей для керамогранита Ветонит Гранит Фикс, 25 кг",
+      "href": "/shop/product/klei-dlya-keramogranita-vetonit-granit-fiks-25-kg"
+    },
+    {
+      "invoiceRow": 30,
+      "price": "588",
+      "unit": "меш",
+      "id": "2986",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/kley-dlya-plitki-yunis-plus-25-kg.png",
+      "value": "Клей для плитки Юнис ПЛЮС, 25 кг",
+      "href": "/shop/product/kley-dlya-plitki-yunis-plus-25-kg"
+    },
+    {
+      "invoiceRow": 33,
+      "price": "1225",
+      "unit": "шт",
+      "id": "2075",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/hGIz35zZFRVuMASmVghNtnlN968MtwJZoRu9cNK2.jpg",
+      "value": "Штукатурная смесь минеральная Церезит CT 35, короед 2,5 мм, 25 кг",
+      "href": "/shop/product/stukaturnaya-smes-st-35"
+    },
+    {
+      "invoiceRow": 34,
+      "price": "3500",
+      "unit": "шт",
+      "id": "2987",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/emal-pf-115-caricyno-belaya-20-kg.jpg",
+      "value": "Эмаль ПФ-115 Царицыно белая, 20 кг",
+      "href": "/shop/product/emal-pf-115-caricyno-belaya-20-kg"
+    },
+    {
+      "invoiceRow": 35,
+      "price": "305",
+      "unit": "шт",
+      "id": "2988",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/emal-pf-115-teks-optimum-svetlo-seraya-09-kg.png",
+      "value": "Эмаль ПФ-115 Текс Оптимум светло-серая, 0,9 кг",
+      "href": "/shop/product/emal-pf-115-teks-optimum-svetlo-seraya-09-kg"
+    },
+    {
+      "invoiceRow": 36,
+      "price": "644",
+      "unit": "шт",
+      "id": "2989",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/emal-pf-115-teks-optimum-temno-sinyaya-19-kg.webp",
+      "value": "Эмаль ПФ-115 Текс Оптимум тёмно-синяя, 1,9 кг",
+      "href": "/shop/product/emal-pf-115-teks-optimum-temno-sinyaya-19-kg"
+    },
+    {
+      "invoiceRow": 37,
+      "price": "206",
+      "unit": "шт",
+      "id": "964",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/XPS-%D0%A2%D0%95%D0%A5%D0%9D%D0%9E%D0%9F%D0%9B%D0%95%D0%9A%D0%A1.png",
+      "value": "ЭПП XPS30-200 Стандарт, 1180×580×30-L, 13 шт./уп.",
+      "href": "/shop/product/epp-xps30-200-texnopleks-118058030-l"
+    },
+    {
+      "invoiceRow": 38,
+      "price": "302",
+      "unit": "шт",
+      "id": "965",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/XPS-%D0%A2%D0%95%D0%A5%D0%9D%D0%9E%D0%9F%D0%9B%D0%95%D0%9A%D0%A1.png",
+      "value": "ЭПП XPS30-200 Стандарт, 1180×580×50-L, 8 шт./уп.",
+      "href": "/shop/product/epp-xps30-200-texnopleks-118058050-l"
+    },
+    {
+      "invoiceRow": 39,
+      "price": "137",
+      "unit": "шт",
+      "id": "2990",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/epp-xps30-200-standart-120060020-l.jpg",
+      "value": "ЭПП XPS30-200 Стандарт, 1200×600×20-L, 20 шт./уп.",
+      "href": "/shop/product/epp-xps30-200-standart-120060020-l"
+    },
+    {
+      "invoiceRow": 40,
+      "price": "1210",
+      "unit": "шт",
+      "id": "1592",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/LQXYYDf7e3zp4kGz2MJkP9CD8yflTDW5ECTFC1kB.jpeg",
+      "value": "Утеплитель ИЗОВЕР Тёплые стены, 610×1000×50 мм, 6,1 м²",
+      "href": "/shop/product/uteplitel-izover-teplye-steny-610100050mm-61m2"
+    },
+    {
+      "invoiceRow": 41,
+      "price": "1210",
+      "unit": "шт",
+      "id": "2991",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/uteplitel-izover-teplye-steny-6101000100mm-305m2.jpg",
+      "value": "Утеплитель ИЗОВЕР Тёплые стены, 610×1000×100 мм, 3,05 м²",
+      "href": "/shop/product/uteplitel-izover-teplye-steny-6101000100mm-305m2"
+    },
+    {
+      "invoiceRow": 42,
+      "price": "2496",
+      "unit": "шт",
+      "id": "2769",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/7VuAqPtCB4tQsa0Y8DJvjqpPLwPR8PhUGyTRCiiw.png",
+      "value": "Утеплитель Кнауф для КОТТЕДЖА Термо Плита 037A, 50 мм",
+      "href": "/shop/product/knauf-kottedz-teploknauf-termo-plita-037-1230x610x50-mm"
+    },
+    {
+      "invoiceRow": 44,
+      "price": "1474",
+      "unit": "шт",
+      "id": "70",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/%D1%82%D0%B5%D1%85%D0%BD%D0%BE%D0%B2%D0%B5%D0%BD%D1%82.jpg",
+      "value": "Утеплитель Техновент Стандарт, 1200×600×50 мм, 0,216 м³",
+      "href": "/shop/product/uteplitel-texnovent-standart-120060050-mm-0216-m3"
+    },
+    {
+      "invoiceRow": 45,
+      "price": "1474",
+      "unit": "шт",
+      "id": "71",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/%D1%82%D0%B5%D1%85%D0%BD%D0%BE%D0%B2%D0%B5%D0%BD%D1%82.jpg",
+      "value": "Утеплитель Техновент Стандарт, 1200×600×100 мм, 0,288 м³",
+      "href": "/shop/product/uteplitel-texnovent-standart-1200600100-mm-0288-m3"
+    },
+    {
+      "invoiceRow": 47,
+      "price": "1870",
+      "unit": "шт",
+      "id": "89",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/%D1%84%D0%BE%D0%BB%D1%8C%D0%B3%D0%B0.jpg",
+      "value": "Фольга алюминиевая 100 мкм, 12 кв. м",
+      "href": "/shop/product/folga-alyuminievaya-100-mkm-12-kvm-rulon"
+    },
+    {
+      "invoiceRow": 48,
+      "price": "1180",
+      "unit": "упак",
+      "id": "1661",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/c2eHGTqI7cLLb0g8nf4vlbuB6KENnH59Ukii45om.jpg",
+      "value": "Утеплитель Роклайт, 1,2×0,6×0,05 м, 5,76 м², 0,288 м³",
+      "href": "/shop/product/uteplitel-texnonikol-roklait-120060050"
+    },
+    {
+      "invoiceRow": 49,
+      "price": "1320",
+      "unit": "шт",
+      "id": "315",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/%D1%81%D0%BC16.jpeg",
+      "value": "Клей для плитки эластичный Церезит CM 16, 25 кг",
+      "href": "/shop/product/klei-dlya-plitki-elasticnyi-cerezit-sm-16-25-kg"
+    },
+    {
+      "invoiceRow": 50,
+      "price": "1674",
+      "unit": "шт",
+      "id": "2992",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/kley-dlya-plitki-cerezit-cm16-belyy-25-kg.webp",
+      "value": "Клей для плитки эластичный Церезит CM 16 белый, 25 кг",
+      "href": "/shop/product/kley-dlya-plitki-cerezit-cm16-belyy-25-kg"
+    },
+    {
+      "invoiceRow": 51,
+      "price": "2210",
+      "unit": "шт",
+      "id": "2993",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/kley-dlya-plitki-cerezit-cm17-25-kg.webp",
+      "value": "Клей для плитки эластичный Церезит CM 17, 25 кг",
+      "href": "/shop/product/kley-dlya-plitki-cerezit-cm17-25-kg"
+    },
+    {
+      "invoiceRow": 52,
+      "price": "886",
+      "unit": "шт",
+      "id": "441",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/Ceresit-%D0%A8%D1%82%D1%83%D0%BA%D0%B0%D1%82%D1%83%D1%80%D0%BA%D0%B0-%D1%84%D0%B0%D1%81%D0%B0%D0%B4%D0%BD%D0%B0%D1%8F-Ceresit-Decor-plus-25-%D0%BA%D0%B3.jpg",
+      "value": "Штукатурная смесь фасадная Церезит DekorPlus, 2 мм, 25 кг",
+      "href": "/shop/product/stukaturnaya-smes-fasadnaya-dekor-plus-cerezit-25-kg"
+    },
+    {
+      "invoiceRow": 64,
+      "price": "1474",
+      "unit": "упак",
+      "id": "69",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/nt%5Byj%2Ckjr.jpg",
+      "value": "Утеплитель Техноблок Стандарт, 1,2×0,6×0,05 м, 0,288 м³",
+      "href": "/shop/product/uteplitel-texnoblok-standart-120060050-mm-0288-m3"
+    },
+    {
+      "invoiceRow": 65,
+      "price": "1474",
+      "unit": "упак",
+      "id": "2994",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/uteplitel-tehnoblok-standart-1200600100mm-0288-m3.jpg",
+      "value": "Утеплитель Техноблок Стандарт, 1,2×0,6×0,1 м, 0,288 м³",
+      "href": "/shop/product/uteplitel-tehnoblok-standart-1200600100mm-0288-m3"
+    }
+  ],
+  "monthProducts": [
+    {
+      "id": "1173",
+      "action": "Арматура рифленая А 500 С 8*6000",
+      "price": "174",
+      "unit": "шт",
+      "link": "/shop/product/armatura-riflenaya-a-500-s-85850",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/arm_d8-700x700.jpg"
+    },
+    {
+      "id": "1483",
+      "action": "Арматура композитная АСК-6 мм (100м.п.)",
+      "price": "15",
+      "unit": "м.п.",
+      "link": "/shop/product/armatura-stekloplastikovaya-kompozitnaya-ask-6-mm-50-mp",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/49684fae-dba7-11e5-a26c-1867b054bc98_7550deb3-7beb-11e6-a067-000c29378178.resize1.png"
+    },
+    {
+      "id": "2978",
+      "action": "БИОТЕКС мореный дуб 2,7л",
+      "price": "1210",
+      "unit": "шт",
+      "link": "/shop/product/biot-ie-ks-morienyi-dub-2-7-l",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/7ca2da74-175b-4361-825a-343837a62fa3.webp"
+    },
+    {
+      "id": "347",
+      "action": "Газобетонный блок \"Poritep\" 625*75*250мм (0,016м3)",
+      "price": "92",
+      "unit": "шт",
+      "link": "/shop/product/gazobetonnyi-blok-poritep-625100250-0016m3",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/hExr43D7fAdC1mXJMcQZP6eRurZ6GN45uSkzVApO.png"
+    },
+    {
+      "id": "2979",
+      "action": "Геотекстиль Изолайк GEO 150мкм 40м2",
+      "price": "1440",
+      "unit": "шт",
+      "link": "/shop/product/gieotiekstil-izolaik-geo-150mkm-40m2",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/364e236ac986b82bb9be731b85a49c43.jpg"
+    },
+    {
+      "id": "200",
+      "action": "Доска обрезная обработанная",
+      "price": "19000",
+      "unit": "м3",
+      "description": "При заказе через сайт дополнительная скидка 5%",
+      "link": "/shop/products/doska-obreznaya-obrabotannaya",
+      "img": "https://lumen-image-bucket.s3.eu-central-1.amazonaws.com/images/%D0%B4%D0%BE%D1%81%D0%BA%D0%B0.jpg"
+    }
+  ],
+  "factory": {
+    "actions": [
+      {
+        "action": "Клей для керамогранита Церезит CM 11 PRO, 25 кг",
+        "price": "539",
+        "unit": "шт",
+        "img": "https://www.ceresit.ru/upload/resize_cache/iblock/cc2/400_400_1/ksptk0iy30r1lz8ss0wgjvsxj070njnk.webp"
+      },
+      {
+        "action": "Клей для плитки и керамогранита Церезит CM 14 EXTRA для улицы и тёплых полов, 25 кг",
+        "price": "864",
+        "unit": "шт",
+        "img": "https://www.ceresit.ru/upload/resize_cache/iblock/fc2/d63bmn0ycxsq8c4gowmzo2t35l4s3ccp/400_400_1/CM14_25kg_front_2000_2000.webp"
+      },
+      {
+        "action": "Гидроизоляция Церезит CR 65, 20 кг",
+        "price": "1415",
+        "unit": "шт",
+        "img": "https://www.ceresit.ru/upload/resize_cache/iblock/825/ukf0ol9lpgn5l5g1tzzgs29re6syyrhc/400_400_1/CR65_20kg_front_2000_2000.webp"
+      },
+      {
+        "action": "Грунтовка для впитывающих оснований Церезит CT 17, 10 л",
+        "price": "1173",
+        "unit": "шт",
+        "img": "https://www.ceresit.ru/upload/resize_cache/iblock/5b8/xzmnx4slx0f7hyuxhcvsxepr9r6nz2we/400_400_1/CT17_PRO_10L_front_2000_2000.webp"
+      },
+      {
+        "action": "Грунтовка для впитывающих оснований Церезит CT 17, 5 л",
+        "price": "642",
+        "unit": "шт",
+        "img": "https://ceresit-spb.ru/sites/default/files/styles/prodcard/public/ct17_pro_leto_5l_1.jpg"
+      },
+      {
+        "action": "Бетонконтакт Церезит CT 19, 3 кг",
+        "price": "566",
+        "unit": "шт",
+        "img": "https://kolorit.ru/upload/iblock/e64/184dwum5whzvot0h2s0x6is6uhu30wnx.jpg"
+      },
+      {
+        "action": "Бетонконтакт Церезит CT 19, 5 кг",
+        "price": "800",
+        "unit": "шт",
+        "img": "https://www.albia.ru/wa-data/public/shop/products/01/41/4101/images/142327/142327.750x0.jpg"
+      },
+      {
+        "action": "Бетонконтакт Церезит CT 19, 15 кг",
+        "price": "2055",
+        "unit": "шт",
+        "img": "https://www.ceresit.ru/upload/resize_cache/iblock/ca1/iardks7evls64dsbk6nnufq0le96900c/400_400_1/CT19_15kg_front_2000_2000.webp"
+      },
+      {
+        "action": "Затирка для швов Церезит CE 33, №01 белая, 2 кг",
+        "price": "278",
+        "unit": "шт",
+        "img": "https://www.ceresit.ru/upload/resize_cache/iblock/8a0/4xzic5iz5eesvz3r3n6zxu7l70egwmwx/400_400_1/CE33_2kg_front_2000_2000.webp"
+      },
+      {
+        "action": "Затирка для швов Церезит CE 33, №43 Багамы, 2 кг",
+        "price": "300",
+        "unit": "шт",
+        "img": "https://www.ceresit.ru/upload/resize_cache/iblock/8a0/4xzic5iz5eesvz3r3n6zxu7l70egwmwx/400_400_1/CE33_2kg_front_2000_2000.webp"
+      },
+      {
+        "action": "Затирка для швов водоотталкивающая Церезит CE 40, белая, 2 кг",
+        "price": "475",
+        "unit": "шт",
+        "img": "https://www.ceresit.ru/upload/resize_cache/iblock/113/t81kpj71szu7pomoxht4cpnbxuw9q1do/400_400_1/CE40_2kg_front_2000_2000.webp"
+      },
+      {
+        "action": "Затирка для швов водоотталкивающая Церезит CE 40, Багама, 2 кг",
+        "price": "502",
+        "unit": "шт",
+        "img": "https://www.ceresit.ru/upload/resize_cache/iblock/113/t81kpj71szu7pomoxht4cpnbxuw9q1do/400_400_1/CE40_2kg_front_2000_2000.webp"
+      },
+      {
+        "action": "Затирка для швов Церезит CE 33, №16 графит, 2 кг",
+        "price": "370",
+        "unit": "шт",
+        "img": "https://www.ceresit.ru/upload/resize_cache/iblock/8a0/4xzic5iz5eesvz3r3n6zxu7l70egwmwx/400_400_1/CE33_2kg_front_2000_2000.webp"
+      },
+      {
+        "action": "Герметик акриловый белый Церезит CS 11, 280 мл",
+        "price": "278",
+        "unit": "шт",
+        "img": "https://www.ceresit.ru/upload/resize_cache/iblock/99a/91but7zh0zw68n7uow36ixjxlaszbchn/400_400_1/CS11_White_280ml_front_2000_2000.webp"
+      },
+      {
+        "action": "Герметик санитарный белый Церезит CS 15, 280 мл",
+        "price": "530",
+        "unit": "шт",
+        "img": "https://www.ceresit.ru/upload/resize_cache/iblock/eba/3neiwc9q4kwjtqihf34ijo1ubemed44h/400_400_1/CS15_White_280ml_front_2000_2000.webp"
+      },
+      {
+        "action": "Герметик санитарный прозрачный Церезит CS 15, 280 мл",
+        "price": "610",
+        "unit": "шт",
+        "img": "https://www.albia.ru/wa-data/public/shop/products/72/68/6872/images/167285/167285.750x0.jpg"
+      }
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+*
+!Dockerfile.production
+!database/
+database/*
+!database/migrations/
+!database/migrations/**

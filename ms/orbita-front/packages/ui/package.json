@@ -1,0 +1,1 @@
+{"name":"@orbita/ui","version":"1.0.0","private":true,"type":"module","exports":{"./styles.css":"./src/styles.css",".":"./src/index.ts"},"peerDependencies":{"svelte":"^5.57.1"}}

@@ -1,0 +1,806 @@
+{
+  "users": {
+    "columns": [
+      "id",
+      "key",
+      "name",
+      "is_active",
+      "email",
+      "password",
+      "remember_token",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "email_verified_at",
+      "deleted_at"
+    ],
+    "source_migration": "2014_10_12_000000_create_users_table.php",
+    "csv": "missing",
+    "rows": 0
+  },
+  "password_resets": {
+    "columns": [
+      "email",
+      "token",
+      "created_at"
+    ],
+    "source_migration": "2014_10_12_100000_create_password_resets_table.php",
+    "csv": "nonempty",
+    "rows": 19
+  },
+  "failed_jobs": {
+    "columns": [
+      "id",
+      "uuid",
+      "connection",
+      "queue",
+      "payload",
+      "exception",
+      "failed_at"
+    ],
+    "source_migration": "2019_08_19_000000_create_failed_jobs_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "personal_access_tokens": {
+    "columns": [
+      "id",
+      "tokenable_type",
+      "tokenable_id",
+      "name",
+      "token",
+      "abilities",
+      "last_used_at",
+      "created_at",
+      "updated_at"
+    ],
+    "source_migration": "2019_12_14_000001_create_personal_access_tokens_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "property": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_04_142414_create_property_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "category": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_04_142453_create_category_table.php",
+    "csv": "nonempty",
+    "rows": 170
+  },
+  "product": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_04_142511_create_product_table.php",
+    "csv": "nonempty",
+    "rows": 1902
+  },
+  "project": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_04_142529_create_project_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "price": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_05_112940_create_price_table.php",
+    "csv": "nonempty",
+    "rows": 1993
+  },
+  "unit": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_201613_create_unit_table.php",
+    "csv": "missing",
+    "rows": 0
+  },
+  "text": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_201704_create_text_table.php",
+    "csv": "missing",
+    "rows": 0
+  },
+  "image": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "hash",
+      "alt",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_201730_create_image_table.php",
+    "csv": "nonempty",
+    "rows": 2082
+  },
+  "team": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_201804_create_team_table.php",
+    "csv": "missing",
+    "rows": 0
+  },
+  "title": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_201835_create_title_table.php",
+    "csv": "missing",
+    "rows": 0
+  },
+  "description": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_201858_create_description_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "menu": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_201955_create_menu_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "head": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_202017_create_head_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "rubric": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_202039_create_rubric_table.php",
+    "csv": "nonempty",
+    "rows": 33
+  },
+  "age": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_202101_create_age_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "service": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_202225_create_service_table.php",
+    "csv": "missing",
+    "rows": 0
+  },
+  "phone": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_202401_create_phone_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "mail": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_202420_create_mail_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "address": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_202446_create_address_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "seotitle": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_202611_create_seotitle_table.php",
+    "csv": "missing",
+    "rows": 0
+  },
+  "seodescription": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_202625_create_seodescription_table.php",
+    "csv": "nonempty",
+    "rows": 170
+  },
+  "file": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_202708_create_file_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "video": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_202729_create_video_table.php",
+    "csv": "missing",
+    "rows": 0
+  },
+  "link": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_202745_create_link_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "post": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_202959_create_post_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "date": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_203019_create_date_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "feedback": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_06_06_213349_create_feedback_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "permission": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_07_28_184632_create_permission_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "role": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_07_28_184655_create_role_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "partner": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_09_16_164718_create_partner_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "client": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_09_16_164737_create_client_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "rule": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_09_16_170735_create_rule_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "seoquery": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_09_17_112025_create_seoquery_table.php",
+    "csv": "nonempty",
+    "rows": 69
+  },
+  "position": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_09_17_112052_create_position_table.php",
+    "csv": "nonempty",
+    "rows": 1550
+  },
+  "resource": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_09_18_142653_create_resource_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "tag": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_09_19_111921_create_tag_table.php",
+    "csv": "missing",
+    "rows": 0
+  },
+  "jobs": {
+    "columns": [
+      "id",
+      "queue",
+      "payload",
+      "attempts",
+      "reserved_at",
+      "available_at",
+      "created_at"
+    ],
+    "source_migration": "2022_09_19_193245_create_jobs_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "catalog": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_10_07_093918_create_catalog_table.php",
+    "csv": "nonempty",
+    "rows": 6
+  },
+  "discount": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_10_08_101736_create_discount_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "business": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_10_14_141434_create_business_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "key": {
+    "columns": [
+      "id",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_10_14_142057_create_key_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "cart": {
+    "columns": [
+      "id",
+      "key",
+      "created_at",
+      "updated_at",
+      "product_id",
+      "session_user"
+    ],
+    "source_migration": "2022_11_27_101115_create_cart_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "brand": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_11_27_104234_create_brand_table.php",
+    "csv": "empty",
+    "rows": 0
+  },
+  "visit": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_11_27_104251_create_visit_table.php",
+    "csv": "missing",
+    "rows": 0
+  },
+  "technology": {
+    "columns": [
+      "id",
+      "key",
+      "is_active",
+      "value",
+      "slug",
+      "parentable_type",
+      "parentable_id",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "source_migration": "2022_11_27_104305_create_technology_table.php",
+    "csv": "missing",
+    "rows": 0
+  },
+  "migrations": {
+    "columns": [
+      "id",
+      "migration",
+      "batch"
+    ],
+    "csv": "nonempty",
+    "rows": 49,
+    "source_migration": "Laravel migration repository"
+  }
+}

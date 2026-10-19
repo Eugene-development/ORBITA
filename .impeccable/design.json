@@ -1,0 +1,545 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-04T20:00:19.701855Z",
+  "title": "Design System: Орбита-Строй",
+  "extensions": {
+    "colorMeta": {
+      "contact-cyan": {
+        "role": "primary",
+        "displayName": "Contact Cyan",
+        "tonalRamp": [
+          "oklch(15.00% 0.09357 223.13)",
+          "oklch(26.43% 0.09357 223.13)",
+          "oklch(37.86% 0.09357 223.13)",
+          "oklch(49.29% 0.09357 223.13)",
+          "oklch(60.71% 0.09357 223.13)",
+          "oklch(72.14% 0.09357 223.13)",
+          "oklch(83.57% 0.09357 223.13)",
+          "oklch(95.00% 0.09357 223.13)"
+        ]
+      },
+      "cart-cyan": {
+        "role": "primary",
+        "displayName": "Cart Cyan",
+        "tonalRamp": [
+          "oklch(15.00% 0.07707 224.28)",
+          "oklch(26.43% 0.07707 224.28)",
+          "oklch(37.86% 0.07707 224.28)",
+          "oklch(49.29% 0.07707 224.28)",
+          "oklch(60.71% 0.07707 224.28)",
+          "oklch(72.14% 0.07707 224.28)",
+          "oklch(83.57% 0.07707 224.28)",
+          "oklch(95.00% 0.07707 224.28)"
+        ]
+      },
+      "featured-cyan": {
+        "role": "primary",
+        "displayName": "Featured Cyan",
+        "tonalRamp": [
+          "oklch(15.00% 0.11094 221.72)",
+          "oklch(26.43% 0.11094 221.72)",
+          "oklch(37.86% 0.11094 221.72)",
+          "oklch(49.29% 0.11094 221.72)",
+          "oklch(60.71% 0.11094 221.72)",
+          "oklch(72.14% 0.11094 221.72)",
+          "oklch(83.57% 0.11094 221.72)",
+          "oklch(95.00% 0.11094 221.72)"
+        ]
+      },
+      "catalog-cyan": {
+        "role": "primary",
+        "displayName": "Catalog Cyan",
+        "tonalRamp": [
+          "oklch(15.00% 0.12574 215.22)",
+          "oklch(26.43% 0.12574 215.22)",
+          "oklch(37.86% 0.12574 215.22)",
+          "oklch(49.29% 0.12574 215.22)",
+          "oklch(60.71% 0.12574 215.22)",
+          "oklch(72.14% 0.12574 215.22)",
+          "oklch(83.57% 0.12574 215.22)",
+          "oklch(95.00% 0.12574 215.22)"
+        ]
+      },
+      "catalog-light": {
+        "role": "primary",
+        "displayName": "Catalog Light",
+        "tonalRamp": [
+          "oklch(15.00% 0.11535 207.08)",
+          "oklch(26.43% 0.11535 207.08)",
+          "oklch(37.86% 0.11535 207.08)",
+          "oklch(49.29% 0.11535 207.08)",
+          "oklch(60.71% 0.11535 207.08)",
+          "oklch(72.14% 0.11535 207.08)",
+          "oklch(83.57% 0.11535 207.08)",
+          "oklch(95.00% 0.11535 207.08)"
+        ]
+      },
+      "catalog-hover": {
+        "role": "primary",
+        "displayName": "Catalog Hover",
+        "tonalRamp": [
+          "oklch(15.00% 0.07719 205.04)",
+          "oklch(26.43% 0.07719 205.04)",
+          "oklch(37.86% 0.07719 205.04)",
+          "oklch(49.29% 0.07719 205.04)",
+          "oklch(60.71% 0.07719 205.04)",
+          "oklch(72.14% 0.07719 205.04)",
+          "oklch(83.57% 0.07719 205.04)",
+          "oklch(95.00% 0.07719 205.04)"
+        ]
+      },
+      "action-red": {
+        "role": "secondary",
+        "displayName": "Action Red",
+        "tonalRamp": [
+          "oklch(15.00% 0.16132 26.90)",
+          "oklch(26.43% 0.16132 26.90)",
+          "oklch(37.86% 0.16132 26.90)",
+          "oklch(49.29% 0.16132 26.90)",
+          "oklch(60.71% 0.16132 26.90)",
+          "oklch(72.14% 0.16132 26.90)",
+          "oklch(83.57% 0.16132 26.90)",
+          "oklch(95.00% 0.16132 26.90)"
+        ]
+      },
+      "action-red-hover": {
+        "role": "secondary",
+        "displayName": "Action Red Hover",
+        "tonalRamp": [
+          "oklch(15.00% 0.13307 25.72)",
+          "oklch(26.43% 0.13307 25.72)",
+          "oklch(37.86% 0.13307 25.72)",
+          "oklch(49.29% 0.13307 25.72)",
+          "oklch(60.71% 0.13307 25.72)",
+          "oklch(72.14% 0.13307 25.72)",
+          "oklch(83.57% 0.13307 25.72)",
+          "oklch(95.00% 0.13307 25.72)"
+        ]
+      },
+      "offer-red": {
+        "role": "secondary",
+        "displayName": "Offer Red",
+        "tonalRamp": [
+          "oklch(15.00% 0.19049 27.52)",
+          "oklch(26.43% 0.19049 27.52)",
+          "oklch(37.86% 0.19049 27.52)",
+          "oklch(49.29% 0.19049 27.52)",
+          "oklch(60.71% 0.19049 27.52)",
+          "oklch(72.14% 0.19049 27.52)",
+          "oklch(83.57% 0.19049 27.52)",
+          "oklch(95.00% 0.19049 27.52)"
+        ]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "White",
+        "tonalRamp": [
+          "oklch(15.00% 0.00000 0.00)",
+          "oklch(26.43% 0.00000 0.00)",
+          "oklch(37.86% 0.00000 0.00)",
+          "oklch(49.29% 0.00000 0.00)",
+          "oklch(60.71% 0.00000 0.00)",
+          "oklch(72.14% 0.00000 0.00)",
+          "oklch(83.57% 0.00000 0.00)",
+          "oklch(95.00% 0.00000 0.00)"
+        ]
+      },
+      "header-slate": {
+        "role": "neutral",
+        "displayName": "Header Slate",
+        "tonalRamp": [
+          "oklch(15.00% 0.00685 247.90)",
+          "oklch(26.43% 0.00685 247.90)",
+          "oklch(37.86% 0.00685 247.90)",
+          "oklch(49.29% 0.00685 247.90)",
+          "oklch(60.71% 0.00685 247.90)",
+          "oklch(72.14% 0.00685 247.90)",
+          "oklch(83.57% 0.00685 247.90)",
+          "oklch(95.00% 0.00685 247.90)"
+        ]
+      },
+      "panel-slate": {
+        "role": "neutral",
+        "displayName": "Panel Slate",
+        "tonalRamp": [
+          "oklch(15.00% 0.00341 247.86)",
+          "oklch(26.43% 0.00341 247.86)",
+          "oklch(37.86% 0.00341 247.86)",
+          "oklch(49.29% 0.00341 247.86)",
+          "oklch(60.71% 0.00341 247.86)",
+          "oklch(72.14% 0.00341 247.86)",
+          "oklch(83.57% 0.00341 247.86)",
+          "oklch(95.00% 0.00341 247.86)"
+        ]
+      },
+      "monthly-gray": {
+        "role": "neutral",
+        "displayName": "Monthly Gray",
+        "tonalRamp": [
+          "oklch(15.00% 0.00287 264.54)",
+          "oklch(26.43% 0.00287 264.54)",
+          "oklch(37.86% 0.00287 264.54)",
+          "oklch(49.29% 0.00287 264.54)",
+          "oklch(60.71% 0.00287 264.54)",
+          "oklch(72.14% 0.00287 264.54)",
+          "oklch(83.57% 0.00287 264.54)",
+          "oklch(95.00% 0.00287 264.54)"
+        ]
+      },
+      "brands-gray": {
+        "role": "neutral",
+        "displayName": "Brands Gray",
+        "tonalRamp": [
+          "oklch(15.00% 0.00171 247.84)",
+          "oklch(26.43% 0.00171 247.84)",
+          "oklch(37.86% 0.00171 247.84)",
+          "oklch(49.29% 0.00171 247.84)",
+          "oklch(60.71% 0.00171 247.84)",
+          "oklch(72.14% 0.00171 247.84)",
+          "oklch(83.57% 0.00171 247.84)",
+          "oklch(95.00% 0.00171 247.84)"
+        ]
+      },
+      "border-slate": {
+        "role": "neutral",
+        "displayName": "Border Slate",
+        "tonalRamp": [
+          "oklch(15.00% 0.01985 252.89)",
+          "oklch(26.43% 0.01985 252.89)",
+          "oklch(37.86% 0.01985 252.89)",
+          "oklch(49.29% 0.01985 252.89)",
+          "oklch(60.71% 0.01985 252.89)",
+          "oklch(72.14% 0.01985 252.89)",
+          "oklch(83.57% 0.01985 252.89)",
+          "oklch(95.00% 0.01985 252.89)"
+        ]
+      },
+      "field-border": {
+        "role": "neutral",
+        "displayName": "Field Border",
+        "tonalRamp": [
+          "oklch(15.00% 0.03511 256.79)",
+          "oklch(26.43% 0.03511 256.79)",
+          "oklch(37.86% 0.03511 256.79)",
+          "oklch(49.29% 0.03511 256.79)",
+          "oklch(60.71% 0.03511 256.79)",
+          "oklch(72.14% 0.03511 256.79)",
+          "oklch(83.57% 0.03511 256.79)",
+          "oklch(95.00% 0.03511 256.79)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.03685 260.03)",
+          "oklch(26.43% 0.03685 260.03)",
+          "oklch(37.86% 0.03685 260.03)",
+          "oklch(49.29% 0.03685 260.03)",
+          "oklch(60.71% 0.03685 260.03)",
+          "oklch(72.14% 0.03685 260.03)",
+          "oklch(83.57% 0.03685 260.03)",
+          "oklch(95.00% 0.03685 260.03)"
+        ]
+      },
+      "secondary-ink": {
+        "role": "neutral",
+        "displayName": "Secondary Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.03745 257.28)",
+          "oklch(26.43% 0.03745 257.28)",
+          "oklch(37.86% 0.03745 257.28)",
+          "oklch(49.29% 0.03745 257.28)",
+          "oklch(60.71% 0.03745 257.28)",
+          "oklch(72.14% 0.03745 257.28)",
+          "oklch(83.57% 0.03745 257.28)",
+          "oklch(95.00% 0.03745 257.28)"
+        ]
+      },
+      "cyan-ink": {
+        "role": "neutral",
+        "displayName": "Cyan Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.06641 227.39)",
+          "oklch(26.43% 0.06641 227.39)",
+          "oklch(37.86% 0.06641 227.39)",
+          "oklch(49.29% 0.06641 227.39)",
+          "oklch(60.71% 0.06641 227.39)",
+          "oklch(72.14% 0.06641 227.39)",
+          "oklch(83.57% 0.06641 227.39)",
+          "oklch(95.00% 0.06641 227.39)"
+        ]
+      },
+      "announcement-ink": {
+        "role": "neutral",
+        "displayName": "Announcement Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.02960 256.85)",
+          "oklch(26.43% 0.02960 256.85)",
+          "oklch(37.86% 0.02960 256.85)",
+          "oklch(49.29% 0.02960 256.85)",
+          "oklch(60.71% 0.02960 256.85)",
+          "oklch(72.14% 0.02960 256.85)",
+          "oklch(83.57% 0.02960 256.85)",
+          "oklch(95.00% 0.02960 256.85)"
+        ]
+      },
+      "footer-ink": {
+        "role": "neutral",
+        "displayName": "Footer Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.03176 264.66)",
+          "oklch(26.43% 0.03176 264.66)",
+          "oklch(37.86% 0.03176 264.66)",
+          "oklch(49.29% 0.03176 264.66)",
+          "oklch(60.71% 0.03176 264.66)",
+          "oklch(72.14% 0.03176 264.66)",
+          "oklch(83.57% 0.03176 264.66)",
+          "oklch(95.00% 0.03176 264.66)"
+        ]
+      },
+      "footer-copy": {
+        "role": "neutral",
+        "displayName": "Footer Copy",
+        "tonalRamp": [
+          "oklch(15.00% 0.00934 258.34)",
+          "oklch(26.43% 0.00934 258.34)",
+          "oklch(37.86% 0.00934 258.34)",
+          "oklch(49.29% 0.00934 258.34)",
+          "oklch(60.71% 0.00934 258.34)",
+          "oklch(72.14% 0.00934 258.34)",
+          "oklch(83.57% 0.00934 258.34)",
+          "oklch(95.00% 0.00934 258.34)"
+        ]
+      },
+      "notice-cyan": {
+        "role": "neutral",
+        "displayName": "Notice Cyan",
+        "tonalRamp": [
+          "oklch(15.00% 0.01889 200.87)",
+          "oklch(26.43% 0.01889 200.87)",
+          "oklch(37.86% 0.01889 200.87)",
+          "oklch(49.29% 0.01889 200.87)",
+          "oklch(60.71% 0.01889 200.87)",
+          "oklch(72.14% 0.01889 200.87)",
+          "oklch(83.57% 0.01889 200.87)",
+          "oklch(95.00% 0.01889 200.87)"
+        ]
+      },
+      "selection-cyan": {
+        "role": "neutral",
+        "displayName": "Selection Cyan",
+        "tonalRamp": [
+          "oklch(15.00% 0.04433 203.39)",
+          "oklch(26.43% 0.04433 203.39)",
+          "oklch(37.86% 0.04433 203.39)",
+          "oklch(49.29% 0.04433 203.39)",
+          "oklch(60.71% 0.04433 203.39)",
+          "oklch(72.14% 0.04433 203.39)",
+          "oklch(83.57% 0.04433 203.39)",
+          "oklch(95.00% 0.04433 203.39)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Шок цена!!!"
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Заголовки страниц"
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Месячное предложение и формы"
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Русская торговая и информационная копия; Inter не загружается, fallback зависит от устройства"
+      },
+      "featured-label": {
+        "displayName": "Featured Label",
+        "purpose": "Компактные товары главной"
+      },
+      "field-label": {
+        "displayName": "Field Label",
+        "purpose": "Подписи полей"
+      },
+      "footer-label": {
+        "displayName": "Footer Label",
+        "purpose": "Uppercase-заголовки footer"
+      }
+    },
+    "shadows": [
+      {
+        "name": "product-card",
+        "value": "0 7px 18px rgb(15 23 42 / .09)",
+        "purpose": "Карточка товара"
+      },
+      {
+        "name": "information-menu",
+        "value": "0 8px 24px rgb(15 23 42 / .13)",
+        "purpose": "Раскрытое меню информации"
+      },
+      {
+        "name": "desktop-catalog",
+        "value": "0 8px 14px rgb(15 23 42 / .22)",
+        "purpose": "Полоса desktop-категорий"
+      },
+      {
+        "name": "search-dialog",
+        "value": "0 18px 60px rgb(15 23 42 / .3)",
+        "purpose": "Native dialog поиска"
+      }
+    ],
+    "motion": [
+      {
+        "name": "monthly-interval",
+        "value": "6000ms",
+        "purpose": "Смена предложения; pause, hidden tab и reduced motion останавливают таймер"
+      },
+      {
+        "name": "scroll",
+        "value": "smooth",
+        "purpose": "Плавный scroll; reduced motion меняет на auto"
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact-controls",
+        "value": "500px"
+      },
+      {
+        "name": "two-columns",
+        "value": "600px"
+      },
+      {
+        "name": "shared-container",
+        "value": "768px"
+      },
+      {
+        "name": "three-columns-and-horizontal-cart",
+        "value": "900px"
+      },
+      {
+        "name": "full-desktop-navigation",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Основное действие витрины",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Красное действие отправки формы; не заменяет cyan-покупку.",
+      "html": "<button type=\"button\" class=\"ds-primary\">Отправить менеджеру</button>",
+      "css": ".ds-primary{font-family:\"Inter\",\"Arial\",sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;border-radius:7px;padding:.65rem 1rem;text-decoration:none;cursor:pointer;border:1px solid rgb(153 27 27);background:rgb(153 27 27);color:white}.ds-primary:hover:not(:disabled){background:rgb(127 29 29)}.ds-primary:focus-visible{outline:3px solid rgb(8 145 178);outline-offset:3px}.ds-primary:disabled{cursor:default;opacity:.65}"
+    },
+    {
+      "name": "Вторичное действие",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Светлая ссылка с тонкой рамкой.",
+      "html": "<a class=\"ds-secondary\" href=\"/shop/rubric/stroymaterialy\">Выбрать товары</a>",
+      "css": ".ds-secondary{font-family:\"Inter\",\"Arial\",sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;border-radius:7px;padding:.65rem 1rem;text-decoration:none;cursor:pointer;background:rgb(248 250 252);color:rgb(22 78 99);border:1px solid rgb(203 213 225)}.ds-secondary:hover{background:rgb(236 254 255)}.ds-secondary:focus-visible{outline:3px solid rgb(8 145 178);outline-offset:3px}"
+    },
+    {
+      "name": "Покупка товара",
+      "kind": "button",
+      "refersTo": "button-product",
+      "description": "Обычная cyan-кнопка карточки товара.",
+      "html": "<button type=\"button\" class=\"ds-product-add\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M3 3h2l2.5 12h10L21 6H6M9 20h.01M17 20h.01\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>В корзину</button>",
+      "css": ".ds-product-add{font-family:\"Inter\",\"Arial\",sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;border-radius:7px;padding:.65rem 1rem;text-decoration:none;cursor:pointer;width:100%;background:rgb(14 116 144);border:1px solid rgb(14 116 144);color:white;font-size:.85rem;padding-inline:.5rem}.ds-product-add svg{width:22px;height:22px;flex:none}.ds-product-add:hover:not(:disabled){background:rgb(21 94 117)}.ds-product-add:focus-visible{outline:3px solid rgb(8 145 178);outline-offset:3px}.ds-product-add:disabled{cursor:default;opacity:.65}.ds-product-add.ds-in-cart{background:rgb(22 78 99);border-color:rgb(22 78 99)}"
+    },
+    {
+      "name": "Покупка избранного товара",
+      "kind": "button",
+      "refersTo": "button-featured-product",
+      "description": "Компактная мягкая кнопка исходной подборки.",
+      "html": "<button type=\"button\" class=\"ds-featured-add\">В корзину</button>",
+      "css": ".ds-featured-add{font-family:\"Inter\",\"Arial\",sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;border-radius:7px;padding:.65rem 1rem;text-decoration:none;cursor:pointer;min-width:108px;width:auto;padding:.5rem .8rem;border-radius:12px;font-size:.875rem;background:rgb(8 145 178);border:1px solid rgb(8 145 178);color:white}.ds-featured-add:hover:not(:disabled){background:rgb(21 94 117)}.ds-featured-add:focus-visible{outline:3px solid rgb(8 145 178);outline-offset:3px}.ds-featured-add:disabled{cursor:default;opacity:.65}.ds-featured-add.ds-in-cart{background:rgb(21 94 117);border-color:rgb(21 94 117)}"
+    },
+    {
+      "name": "Поле ввода витрины",
+      "kind": "input",
+      "refersTo": "text-field",
+      "description": "Явная подпись и тонкая slate-рамка; образец email-поля footer.",
+      "html": "<label class=\"ds-label\" for=\"ds-email\">Ваша почта</label><input class=\"ds-field\" id=\"ds-email\" type=\"email\" placeholder=\"Ваша почта\" autocomplete=\"email\"/>",
+      "css": ".ds-label{font-family:\"Inter\",\"Arial\",sans-serif;display:block;margin-bottom:.4rem;font-size:.9rem;font-weight:600;color:rgb(30 41 59)}.ds-field{font-family:\"Inter\",\"Arial\",sans-serif;width:100%;min-height:44px;padding:.65rem .8rem;color:rgb(30 41 59);background:white;border:1px solid rgb(148 163 184);border-radius:6px;caret-color:rgb(14 116 144)}.ds-field::placeholder{color:rgb(100 116 139)}.ds-field:focus-visible{outline:3px solid rgb(8 145 178);outline-offset:3px}"
+    },
+    {
+      "name": "Desktop-категории",
+      "kind": "nav",
+      "description": "Горизонтальные ячейки исходного cyan-каталога; mobile раскрывается кнопкой.",
+      "html": "<nav class=\"ds-catalog\" aria-label=\"Каталог\"><a href=\"/shop/rubric/stroymaterialy\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\"><path d=\"m8.25 4.5 7.5 7.5-7.5 7.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>Материалы</a><a href=\"/shop/rubric/izolyatsiya\">Изоляция</a><a href=\"/shop/rubric/otdelka\">Отделка</a></nav>",
+      "css": ".ds-catalog{font-family:\"Inter\",\"Arial\",sans-serif;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));box-shadow:0 8px 14px rgb(15 23 42 / .22)}.ds-catalog a{display:flex;gap:.2rem;align-items:center;justify-content:center;min-height:48px;padding:.65rem;background:linear-gradient(to right,rgb(6 182 212),rgb(103 232 249),rgb(6 182 212));border:1px solid rgb(209 213 219);font-size:1rem;font-weight:500;letter-spacing:.035em;color:rgb(17 24 39);text-decoration:none;text-align:center}.ds-catalog a:hover{background:linear-gradient(to right,rgb(103 232 249),rgb(165 243 252),rgb(103 232 249))}.ds-catalog a:focus-visible{outline:3px solid rgb(8 145 178);outline-offset:3px}.ds-catalog svg{width:16px;height:16px;margin-right:.45rem;color:rgb(127 29 29);flex:none}"
+    },
+    {
+      "name": "Корзина и счётчик",
+      "kind": "chip",
+      "refersTo": "cart-count",
+      "description": "Счётчик внутри доступной ссылки корзины.",
+      "html": "<a class=\"ds-cart\" href=\"/shop/cart\" aria-label=\"Корзина, товаров: 0\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M3 3h2l2.5 12h10L21 6H6M9 20h.01M17 20h.01\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg><span>Корзина</span><b class=\"ds-count\">0</b></a>",
+      "css": ".ds-cart{font-family:\"Inter\",\"Arial\",sans-serif;display:inline-flex;align-items:center;gap:.5rem;min-height:44px;padding:.6rem .85rem;background:rgb(21 94 117);color:white;border-radius:6px;text-decoration:none;white-space:nowrap}.ds-cart svg{width:22px;height:22px;flex:none}.ds-count{background:white;color:rgb(153 27 27);min-width:1.45rem;padding:.05rem .3rem;border-radius:4px;text-align:center}.ds-cart:focus-visible{outline:3px solid rgb(8 145 178);outline-offset:3px}"
+    },
+    {
+      "name": "Панель редактора",
+      "kind": "card",
+      "description": "Общая card-поверхность админки: спокойная рамка и плотная форма.",
+      "html": "<section class=\"ds-panel\"><h2>Карточка товара</h2><p>Справочники выбираются из существующего каталога.</p><button class=\"ds-admin-save\" type=\"button\">Сохранить</button></section>",
+      "css": ".ds-panel{font-family:\"Inter\",\"Arial\",sans-serif;padding:1.25rem;border:1px solid rgb(219 226 232);border-radius:8px;background:white;color:rgb(31 41 55)}.ds-panel h2{font-size:1.5rem;line-height:1.4;font-weight:600;margin:0 0 1rem}.ds-panel p{line-height:1.5;margin:0 0 1rem}.ds-admin-save{font-family:\"Inter\",\"Arial\",sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;border-radius:7px;padding:.65rem 1rem;text-decoration:none;cursor:pointer;background:var(--color-brand,rgb(21 94 117));color:white;border:1px solid transparent;border-radius:.375rem;padding:.625rem 1rem;font-weight:600}.ds-admin-save:hover:not(:disabled){background:rgb(22 78 99)}.ds-admin-save:focus-visible{outline:3px solid rgb(8 145 178);outline-offset:3px}.ds-admin-save:disabled{opacity:.55;cursor:not-allowed}"
+    },
+    {
+      "name": "Сообщение корзины",
+      "kind": "custom",
+      "refersTo": "notice",
+      "description": "Тонкая cyan-рамка со всех сторон, читаемый текст и ссылка.",
+      "html": "<div class=\"ds-notice\" role=\"status\"><p>Корзина пуста. Ждём вас снова за покупками.</p><a href=\"/shop/rubric/stroymaterialy\">Выбрать товары</a></div>",
+      "css": ".ds-notice{font-family:\"Inter\",\"Arial\",sans-serif;padding:1rem 1.2rem;border-radius:6px;border:1px solid rgb(165 243 252);background:rgb(236 254 255);color:rgb(22 78 99);margin:1rem 0;line-height:1.5}.ds-notice p{margin:0 0 .6rem}.ds-notice a{color:inherit;text-decoration:underline;text-underline-offset:.2em}.ds-notice a:focus-visible{outline:3px solid rgb(8 145 178);outline-offset:3px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Существующая витрина «Орбита-Строй»",
+    "overview": "Это запись перенесённой системы, а не новая концепция бренда. Визуальная власть принадлежит исходному frontend `/Users/evgenijcelnokov/Work/FRONTEND/ORBITA/DZR/ORBITA-SV-DZR-3/app`, его assets и независимым снимкам в `runtime/reference`. При расхождении этих источников с интерпретацией переноса нужно снова сравнить оригинал; новый CSS не разрешает сам себе менять эталон.\n\nМагазин сохраняет белый фон, светлые серые и slate-полосы, cyan-контакты и каталог, красные акции, компактные карточки и тёмный юридический footer. Изображения строительных материалов, узнаваемый логотип, телефонные контакты и действующая копия несут идентичность. Админка использует связанные цвета и простые таблицы и формы, где сотрудник быстро находит карточку и выполняет действие.",
+    "keyCharacteristics": [
+      "Существующие товары, изображения, логотип и русская копия задают характер.",
+      "Cyan ведёт к каталогу и покупке; красный выделяет акции и важные действия.",
+      "Белый и светлые полосы разделяют длинную витрину; тёмный footer завершает её.",
+      "Телефон, поиск, корзина и каталог остаются доступны на узком экране.",
+      "Админка сохраняет ясные поля, таблицы, статусы и обратную связь."
+    ],
+    "rules": [
+      {
+        "name": "The Reference Rule",
+        "body": "Сохранять назначение цветов по оригиналу; общие токены админки не переопределяют палитру витрины.",
+        "section": "colors"
+      },
+      {
+        "name": "The Content Rule",
+        "body": "Проверять переносы на настоящей русской копии и длинных названиях товара; не сокращать факты ради удобного макета.",
+        "section": "typography"
+      },
+      {
+        "name": "The Thin Boundary Rule",
+        "body": "Сообщения, поля и таблицы разделять тонкими рамками; не заменять их толстой цветной полосой.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Сравнивать изменения с исходными снимками на той же ширине и в том же состоянии.",
+      "Сохранять исходные assets, разделы, торговую копию, телефоны, юридические реквизиты и URL.",
+      "Проверять настоящие названия, цены, единицы, пустые состояния, ошибки и keyboard focus.",
+      "Использовать разрешённое раскрытие mobile-каталога и полную навигацию от 1280px.",
+      "Отделять подтверждённую визуальную сверку от состояния, проверенного только по коду или тесту."
+    ],
+    "donts": [
+      "Не заменять существующую витрину новым визуальным миром без запроса пользователя.",
+      "Не выводить покупаемую цену из рекламного изображения или статического текста акции.",
+      "Не выдумывать реальные товары, отзывы, реквизиты или конфигурацию провайдера.",
+      "Не переносить общий admin-стиль поверх storefront overrides.",
+      "Не заявлять точное совпадение страниц без исходных снимков или проверенный canvas внешней карты."
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+scalar Decimal @scalar(class: "App\\Modules\\Catalog\\DecimalScalar")
+
+type Query {
+  catalog(key: String @rules(apply: ["in:1"])): [Catalog!]! @field(resolver: "App\\Modules\\Catalog\\CatalogQuery@catalog")
+  catalog_one(slug: String!, key: String @rules(apply: ["in:1"])): Catalog @field(resolver: "App\\Modules\\Catalog\\CatalogQuery@catalogOne")
+  rubric_one(slug: String!, key: String @rules(apply: ["in:1"])): Rubric @field(resolver: "App\\Modules\\Catalog\\CatalogQuery@rubricOne")
+  category_one(slug: String!, key: String @rules(apply: ["in:1"])): Category @field(resolver: "App\\Modules\\Catalog\\CatalogQuery@categoryOne")
+  product_one(slug: String!, key: String @rules(apply: ["in:1"])): Product @field(resolver: "App\\Modules\\Catalog\\CatalogQuery@productOne")
+  products(search: String, categoryId: ID, page: Int = 1, first: Int = 24): ProductPage! @field(resolver: "App\\Modules\\Catalog\\CatalogQuery@products")
+  productIds(ids: [ID!]!): [Product!]! @field(resolver: "App\\Modules\\Catalog\\CatalogQuery@productIds")
+  adminProducts(search: String, categoryId: ID, status: Boolean, page: Int = 1, first: Int = 24): ProductPage! @guard @field(resolver: "App\\Modules\\Catalog\\CatalogQuery@adminProducts")
+  adminProduct(id: ID!): Product @guard @field(resolver: "App\\Modules\\Catalog\\CatalogQuery@adminProduct")
+  referenceData: ReferenceData! @guard @field(resolver: "App\\Modules\\Catalog\\CatalogQuery@referenceData")
+}
+type Mutation {
+  createProduct(input: ProductInput!): Product! @guard @field(resolver: "App\\Modules\\Catalog\\ProductMutation@create")
+  updateProduct(id: ID!, input: ProductInput!): Product! @guard @field(resolver: "App\\Modules\\Catalog\\ProductMutation@update")
+  archiveProduct(id: ID!): Product! @guard @field(resolver: "App\\Modules\\Catalog\\ProductMutation@archive")
+  restoreProduct(id: ID!): Product! @guard @field(resolver: "App\\Modules\\Catalog\\ProductMutation@restore")
+}
+union Parentable = Catalog | Rubric | Category | Product
+type Catalog { id: ID!, key: String!, value: String!, slug: String, rubric: [Rubric!]! @morphMany, text: [Text!]! @morphMany }
+type Rubric { id: ID!, key: String!, value: String!, slug: String, category: [Category!]! @morphMany, text: [Text!]! @morphMany, parentable: Parentable @morphTo }
+type Category { id: ID!, key: String!, value: String!, slug: String, product: [Product!]! @morphMany, text: [Text!]! @morphMany, seoTitle: SeoTitle @morphOne, seoDescription: SeoDescription @morphOne, parentable: Parentable @morphTo }
+type Product {
+  id: ID!, key: String!, value: String!, slug: String, is_active: Boolean!, categoryId: ID @field(resolver: "App\\Modules\\Catalog\\CatalogQuery@categoryId"),
+  price: Price @morphOne, unit: Unit @morphOne, image: Image @morphOne, text: [Text!]! @morphMany, property: [Property!]! @morphMany, parentable: Parentable @morphTo
+}
+type Price { id: ID!, key: String!, value: Decimal! }
+type Unit { id: ID!, key: String!, value: String! }
+type Image { id: ID!, key: String!, hash: String!, alt: String, url: String @field(resolver: "App\\Modules\\Media\\MediaUrl@image") }
+type Text { id: ID!, key: String!, value: String!, slug: String }
+type Property { id: ID!, key: String!, value: String!, slug: String }
+type SeoTitle { id: ID!, value: String }
+type SeoDescription { id: ID!, value: String }
+type ProductPage { data: [Product!]!, paginatorInfo: PaginatorInfo! }
+type PaginatorInfo { currentPage: Int!, lastPage: Int!, total: Int!, hasMorePages: Boolean! }
+type UnitReference { value: String! }
+type ReferenceData { categories: [Category!]!, units: [UnitReference!]!, catalogWritesEnabled: Boolean! }
+input ContentInput { id: ID, value: String!, slug: String }
+input ProductInput {
+  value: String!, slug: String!, categoryId: ID!, price: Decimal!, unit: String!, is_active: Boolean,
+  imageHash: String, imageAlt: String, texts: [ContentInput!], properties: [ContentInput!]
+}

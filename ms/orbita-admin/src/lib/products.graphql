@@ -1,0 +1,12 @@
+fragment AdminProductFields on Product {
+  id value slug is_active categoryId
+  price { value } unit { value } image { hash alt url }
+  text { id key value slug } property { id key value slug }
+}
+query AdminProductList($search: String, $categoryId: ID, $status: Boolean, $page: Int, $first: Int) {
+  adminProducts(search:$search,categoryId:$categoryId,status:$status,page:$page,first:$first) { data { ...AdminProductFields } paginatorInfo { currentPage lastPage total } }
+  referenceData { catalogWritesEnabled categories { id value } units { value } }
+}
+query AdminProductDetail($id: ID!) { adminProduct(id:$id) { ...AdminProductFields } referenceData { catalogWritesEnabled categories { id value } units { value } } }
+mutation CreateCard($input: ProductInput!) { createProduct(input:$input) { ...AdminProductFields } }
+mutation UpdateCard($id: ID!, $input: ProductInput!) { updateProduct(id:$id,input:$input) { ...AdminProductFields } }

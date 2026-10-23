@@ -52,7 +52,7 @@ def main():
 
         binary = base / 'bin'
         binary.mkdir()
-        log, state = base / 'commands.jsonl', base / 'applied'
+        log = base / 'commands.jsonl'
         stub = binary / 'docker'
         stub.write_text('''#!/usr/bin/env python3
 import json,os,sys
@@ -64,17 +64,12 @@ if args == ['context', 'show']:
     sys.exit(0)
 mode=os.environ.get('FAIL_COMMAND')
 if mode in args: sys.exit(17)
-if 'orbita:catalog-inspect' in args:
-    fingerprint=('b' if mode=='fingerprint-change' and Path(os.environ['APPLIED']).exists() else 'a')*64
-    print(json.dumps({'fingerprint':fingerprint,'issues':[],'driver':'mysql','schema':{'product':{}},'max_ids':{'product':'1'}}))
-if args[-1:] == ['db'] and 'run' in args: Path(os.environ['APPLIED']).touch()
 ''')
         stub.chmod(0o755)
-        env.update(PATH=str(binary) + os.pathsep + env['PATH'], COMMAND_LOG=str(log), APPLIED=str(state), COMPOSE_PROFILES='tools', COMPOSE_FILE='unrelated.yml', ORBITA_PROD_ENV_FILE='/unrelated/.env')
+        env.update(PATH=str(binary) + os.pathsep + env['PATH'], COMMAND_LOG=str(log), COMPOSE_PROFILES='tools', COMPOSE_FILE='unrelated.yml', ORBITA_PROD_ENV_FILE='/unrelated/.env')
 
         def run(path, *args, fail=None):
             log.write_text('')
-            state.unlink(missing_ok=True)
             active = dict(env)
             if fail: active['FAIL_COMMAND'] = fail
             result = subprocess.run(['bash', str(project / path), *args], cwd=base, env=active, capture_output=True, text=True)
@@ -112,11 +107,8 @@ if args[-1:] == ['db'] and 'run' in args: Path(os.environ['APPLIED']).touch()
             assert not any('up' in c['args'] for c in calls)
         assert {path.name for path in (api / 'scripts').iterdir()} == {'compose.sh', 'start.sh', 'update.sh', 'stop.sh'}
         for action in ['start', 'update']:
-            for check in ['orbita:catalog-inspect', 'orbita:migrations-check']:
-                calls = run(f'prod/orbita-api/scripts/{action}.sh', fail=check)
-                assert not any('up' in c['args'] and 'redis' not in c['args'] for c in calls)
             calls = run(f'prod/orbita-api/scripts/{action}.sh')
-            assert any('orbita:catalog-inspect' in c['args'] and '--check' in c['args'] for c in calls)
+            assert not any('run' in c['args'] or 'artisan' in c['args'] for c in calls)
         calls = run('prod/orbita-api/scripts/stop.sh')
         assert any('down' in c['args'] for c in calls)
         (api / '.env.migrate').write_text('DB_HOST=unrelated-host\n')
@@ -134,7 +126,7 @@ if args[-1:] == ['db'] and 'run' in args: Path(os.environ['APPLIED']).touch()
         assert calls[0]['args'] == ['artisan', 'orbita:service-migrate', '--pretend']
         calls = run('scripts/migrate-services.sh', 'local', '--force')
         assert calls[0]['args'] == ['artisan', '--env=local', 'orbita:service-migrate', '--force']
-        print('PASS local PHP migration runner; no Docker migration calls; server start checks readiness only')
+        print('PASS local PHP migration runner; server start/update run no Artisan checks or migrations')
 
 
 

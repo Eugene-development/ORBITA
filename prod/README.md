@@ -10,7 +10,7 @@ HTTPS и восстановления — [Development/VPS](../../VPS/README.md)
 | --- | --- | --- |
 | `orbita-front` | Витрина SvelteKit + nginx | `127.0.0.1:4151` |
 | `orbita-admin` | Админка `/admin/`, SvelteKit + nginx | `127.0.0.1:4152` |
-| `orbita-api` | Laravel API, авторизация, Redis, outbox-worker, scheduler; только read-only проверка миграций | `127.0.0.1:7151` |
+| `orbita-api` | Laravel API, авторизация, Redis, outbox-worker, scheduler | `127.0.0.1:7151` |
 
 Каждая папка запускается после распаковки без исходников репозитория. Общего Compose,
 gateway, MySQL и отдельного auth здесь нет. API использует существующую внешнюю БД.
@@ -38,6 +38,8 @@ docker login
 
 Сборка использует встроенный Docker builder текущего context (`--builder "$(docker context show)"`) и явно загружает образ (`--load`) перед `docker push`; выбранный пользовательский buildx-builder не влияет на этот сценарий.
 Сборка рассчитана на `linux/amd64`; при необходимости задайте `PLATFORM`.
+API использует `predis/predis` из Composer: Compose явно задаёт `REDIS_CLIENT=predis`, в том числе поверх старого значения `phpredis` в `.env`. При обновлении образа обновляйте и `prod/orbita-api/docker-compose.yml` на VPS.
+В production-образ входят только runtime-файлы и Composer-зависимости без `require-dev`; Composer, тесты, локальное storage и инструменты компиляции в него не входят. Расширения `mbstring` и cURL уже есть в базовом PHP; `intl`, `zip` и PhpRedis приложению не требуются.
 `orbita-db` — самостоятельный локальный Laravel-сервис, без Docker-образа. Он не собирается и не публикуется; старый `deploy/db.sh` завершится с пояснением. Миграции запускаются PHP на Mac через SSH-туннель по [VPS/18](../../VPS/18-local-database.md) и [orbita-db README](../ms/orbita-db/README.md). Для локальной разработки контейнеров используйте `scripts/build.sh local`.
 
 ## Настройки
@@ -99,7 +101,7 @@ php artisan orbita:service-migrate
 
 Это параметры инфраструктуры из VPS/18; актуальность IP MySQL проверяется по той инструкции. На чистой базе отсутствие `orbita_migrations` до первого запуска ожидаемо; восстановление 50 legacy-таблиц и CSV выполняется отдельно командами из README `orbita-db`. Не запускать recovery на существующем каталоге.
 
-`orbita:service-migrate` сохраняет проверку структуры несервисных таблиц до и после служебных миграций; CRUD и schema approval не включает. API не регистрирует миграции и отклоняет команды migrate/seed. Start/update проверяют metadata и read-only `orbita:migrations-check` по списку миграций своего релиза, но ничего не применяют. При pending migrations сначала завершите локальный шаг и повторите запуск. После применения миграций **на VPS**:
+`orbita:service-migrate` сохраняет проверку структуры несервисных таблиц до и после служебных миграций; CRUD и schema approval не включает. API не регистрирует миграции и отклоняет команды migrate/seed. Start/update не запускают Artisan-проверки каталога или миграций. Необходимые миграции применяйте заранее локально из `orbita-db`. После применения миграций **на VPS**:
 
 ```sh
 cd /root/Project/ORBITA
@@ -126,9 +128,9 @@ Python на VPS для них не требуется. Локальные Python
 проверку настроек перед поставкой выполняйте командой `python3 scripts/check-production.py`.
 Скрипты работают из любого каталога, явно выбирают свою `.env`, Compose и project name;
 унаследованные COMPOSE_PROFILES/COMPOSE_FILE не изменяют состав поставки; мигратора в Compose нет.
-Update скачивает и пересоздаёт только сервисы
-своей папки; API также проверяет metadata командой `orbita:catalog-inspect --check`
-и наличие миграций командой `orbita:migrations-check`. Stop API выполняет `docker compose down`,
+Start выполняет `pull` → `up -d` → `ps`, update — `pull` → `up -d --force-recreate` → `ps`, как в LEGET.
+Скрипты не создают временные контейнеры для проверок каталога или миграций.
+Stop API выполняет `docker compose down`,
 как в LEGET, сохраняя volumes.
 При переходе сначала остановите старую поставку, чтобы освободить порты.
 

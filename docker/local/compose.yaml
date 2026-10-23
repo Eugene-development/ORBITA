@@ -2,6 +2,8 @@ name: orbita-local
 x-api: &api
   image: orbita/api:local
   env_file: .env
+  environment:
+    REDIS_CLIENT: predis
   restart: unless-stopped
   depends_on:
     mysql: {condition: service_healthy}

@@ -11,6 +11,7 @@ x-runtime: &runtime
     APP_DEBUG: "false"
     APP_TIMEZONE: Europe/Moscow
     TZ: Europe/Moscow
+    REDIS_CLIENT: predis
     APP_KEY: "${APP_KEY:?Set the permanent APP_KEY in .env}"
     DB_DATABASE: "${DB_DATABASE:?Set the actual project database in .env}"
     DB_USERNAME: "${DB_USERNAME:?Set the actual runtime user in .env}"

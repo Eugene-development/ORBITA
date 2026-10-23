@@ -1,11 +1,19 @@
-.env
-.env.*
 vendor
-storage/logs/*
-storage/framework/*
-bootstrap/cache/*.php
+node_modules
+storage/*
+bootstrap/cache/*
 *.sqlite
 .git
+.gitignore
+.gitattributes
+.github/
+.idea/
+.vscode/
+.DS_Store
+.phpunit*
+*.log
+*.tmp
+*.md
 
 # Runtime credentials stay on the host; only the public CA enters the image.
 .env
@@ -14,4 +22,5 @@ cert/*
 !cert/mysql-ca.pem
 secrets/
 .claude/
+.impeccable/
 graphify-out/

@@ -22,8 +22,7 @@ def resolve(path: Path, service: str = 'api') -> dict:
     path = path.resolve()
     environment = os.environ.copy()
     environment['ORBITA_PROD_ENV_FILE'] = str(path)
-    # Resolve only the supplied settings. A private .env.migrate next to the
-    # real bundle must never be implicitly pulled into a dummy-settings audit.
+    # Resolve only the supplied runtime settings in a temporary bundle.
     with tempfile.TemporaryDirectory(prefix='orbita-compose-audit-') as directory:
         compose = Path(directory) / 'docker-compose.yml'
         shutil.copy2(ROOT / f'prod/orbita-{service}/docker-compose.yml', compose)
@@ -42,7 +41,7 @@ def validate(config: dict) -> None:
         raise ValueError('Unknown portable production profile.')
     bundle = name.removeprefix('orbita-')
     services = config.get('services', {})
-    expected = {'app', 'nginx', 'redis', 'worker', 'scheduler', 'db'} if bundle == 'api' else {'app', 'nginx'}
+    expected = {'app', 'nginx', 'redis', 'worker', 'scheduler'} if bundle == 'api' else {'app', 'nginx'}
     if set(services) != expected:
         raise ValueError('Unexpected production services.')
     port = {'front': 4151, 'admin': 4152, 'api': 7151}[bundle]
@@ -52,10 +51,10 @@ def validate(config: dict) -> None:
             raise ValueError(f'Only nginx may publish a host port: {name}.')
         if name == 'nginx' and (len(ports) != 1 or ports[0].get('host_ip') != '127.0.0.1' or ports[0].get('target') != 80 or int(ports[0]['published']) != port):
             raise ValueError('Nginx must bind the assigned loopback HTTP port.')
-    runtime = ['app', 'worker', 'scheduler', 'db'] if bundle == 'api' else ['app']
+    runtime = ['app', 'worker', 'scheduler'] if bundle == 'api' else ['app']
     for name in runtime:
         service = services[name]
-        expected_image = f'larux/orbita-{bundle if name != "db" else "db"}:latest'
+        expected_image = f'larux/orbita-{bundle}:latest'
         if service['image'] != expected_image:
             raise ValueError('Runtime image differs from the fixed build name.')
         if not service.get('read_only') or 'ALL' not in service.get('cap_drop', []) or 'no-new-privileges:true' not in service.get('security_opt', []):
@@ -77,8 +76,6 @@ def validate(config: dict) -> None:
             raise ValueError('API readiness check is missing.')
         if not config['networks']['database'].get('external'):
             raise ValueError('Production MySQL must remain external.')
-        if services['db']['command'] != ['php', 'artisan', 'migrate', '--path=/migrations', '--realpath', '--force']:
-            raise ValueError('Only canonical service migrations may run.')
         if services['worker']['command'] != ['php', 'artisan', 'orbita:outbox-work', '--sleep=3'] or services['scheduler']['command'] != ['php', 'artisan', 'schedule:work']:
             raise ValueError('Outbox/scheduler commands differ from the application contract.')
 

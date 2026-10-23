@@ -190,7 +190,9 @@
     ],
     "source_migration": "2022_06_06_201730_create_image_table.php",
     "csv": "nonempty",
-    "rows": 2082
+    "rows": 2065,
+    "original_rows": 2082,
+    "removed_duplicate_id_rows": 17
   },
   "team": {
     "columns": [

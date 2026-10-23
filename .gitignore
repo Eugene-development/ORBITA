@@ -28,3 +28,13 @@ prod/**/cert/*.pem
 prod/**/*.tar.gz
 **/__pycache__/
 !**/.env.migrate.example
+
+# Local certificates
+cert/
+
+# Local standalone migration runtime
+!ms/orbita-db/.env.local.example
+ms/orbita-db/bootstrap/cache/*.php
+ms/orbita-db/storage/**
+!ms/orbita-db/storage/**/
+!ms/orbita-db/storage/**/.gitignore

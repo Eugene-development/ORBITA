@@ -12,6 +12,7 @@ use Illuminate\Foundation\Testing\TestCase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\MySqlConnection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use RuntimeException;
 
@@ -27,10 +28,10 @@ final class RecoveryImportTest extends TestCase
         parent::setUp();
         config(['database.default' => 'sqlite', 'database.connections.sqlite.database' => ':memory:', 'orbita.catalog_writes_enabled' => false]);
         DB::purge('sqlite');
-        (require base_path('../orbita-db/database/recovery/2026_10_14_000000_reconstruct_legacy_schema.php'))->up();
+        (require base_path('database/recovery/2026_10_14_000000_reconstruct_legacy_schema.php'))->up();
         $this->directory = sys_get_temp_dir().'/orbita-recovery-test-'.bin2hex(random_bytes(8));
         mkdir($this->directory, 0700);
-        $this->manifest = json_decode(file_get_contents(base_path('../orbita-db/database/recovery-manifest.json')), true, flags: JSON_THROW_ON_ERROR);
+        $this->manifest = json_decode(file_get_contents(base_path('database/recovery-manifest.json')), true, flags: JSON_THROW_ON_ERROR);
         foreach ($this->manifest as $table => &$spec) {
             $spec['rows'] = 0;
             if ($spec['csv'] !== 'missing') {
@@ -279,10 +280,24 @@ CSV;
         $this->assertSame(0, DB::table('product')->count());
     }
 
-    public function test_non_recovery_targets_are_rejected(): void
+    public function test_non_mysql_targets_are_rejected_outside_in_memory_tests(): void
     {
-        $this->expectExceptionMessage('orbita_recovery_*');
+        $this->expectExceptionMessage('Import requires MySQL');
         (new RecoveryImporter)->assertReady(DB::connection(), $this->dataset(), 'orbita');
+    }
+
+    public function test_an_explicit_target_name_is_still_required(): void
+    {
+        $db = new MySqlConnection(static fn () => throw new RuntimeException('Database must not be queried'), 'orbita', '', ['driver' => 'mysql']);
+        $this->expectExceptionMessage('explicit target database name');
+        (new RecoveryImporter)->assertReady($db, $this->dataset(), '');
+    }
+
+    public function test_target_name_must_match_the_configured_database_before_any_query(): void
+    {
+        $db = new MySqlConnection(static fn () => throw new RuntimeException('Database must not be queried'), 'orbita', '', ['driver' => 'mysql']);
+        $this->expectExceptionMessage('Target database differs from the configured connection');
+        (new RecoveryImporter)->assertReady($db, $this->dataset(), 'other_database');
     }
 
     public function test_wrong_schema_and_nonempty_service_tables_are_rejected(): void
@@ -309,7 +324,7 @@ CSV;
 
     public function test_command_file_only_dry_run_never_uses_the_database(): void
     {
-        $original = json_decode(file_get_contents(base_path('../orbita-db/database/recovery-manifest.json')), true);
+        $original = json_decode(file_get_contents(base_path('database/recovery-manifest.json')), true);
         foreach ($original as $table => $spec) {
             if ($spec['csv'] === 'missing') continue;
             $stream = fopen($this->directory.'/'.$table.'.csv', 'wb');

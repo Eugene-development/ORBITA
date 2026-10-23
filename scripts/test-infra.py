@@ -126,17 +126,15 @@ class InfrastructureTest(unittest.TestCase):
             self.assertEqual(output.stat().st_mode & 0o777, 0o600)
 
     def test_php_entrypoint_initialization_does_not_pollute_machine_readable_command_stdout(self):
-        source = (ROOT / "ms/orbita-api/Dockerfile.production").read_text()
-        run = source.split("RUN printf", 1)[1].split("&& chmod", 1)[0]
-        lines = re.findall(r"'([^']*)'", run)[1:]
+        source = (ROOT / "ms/orbita-api/entrypoint.sh").read_text()
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             entrypoint = root / "entrypoint.sh"
-            entrypoint.write_text("\n".join(lines) + "\n")
+            entrypoint.write_text(source.replace("/var/www", str(root)))
             fake_bin = root / "bin"
             fake_bin.mkdir()
             fake_php = fake_bin / "php"
-            fake_php.write_text("#!/bin/sh\ncase \"$2\" in package:discover|lighthouse:cache) echo initialization-log ;; *) echo '{\"fingerprint\":\"fixture\"}' ;; esac\n")
+            fake_php.write_text('#!/bin/sh\n[ "$1" = docker/runtime-check.php ] && exit 0\ncase "$2" in package:discover|lighthouse:cache) echo initialization-log ;; *) echo \'{"fingerprint":"fixture"}\' ;; esac\n')
             fake_php.chmod(0o755)
             environment = {"PATH": str(fake_bin) + ":" + os.environ["PATH"], "APP_ENV": "production"}
             result = subprocess.run(["sh", str(entrypoint), "php", "artisan", "orbita:catalog-inspect"], cwd=root, env=environment, capture_output=True, text=True)

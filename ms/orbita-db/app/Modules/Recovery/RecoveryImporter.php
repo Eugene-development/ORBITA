@@ -24,8 +24,8 @@ final class RecoveryImporter
         }
         $driver = $db->getDriverName();
         $test = $inMemoryTest && $driver === 'sqlite' && $db->getDatabaseName() === ':memory:' && $target === ':memory:';
-        if (! $test && ($driver !== 'mysql' || ! preg_match('/^orbita_recovery_[a-zA-Z0-9_]+$/D', $target))) {
-            throw new RecoveryException('Import requires MySQL and an explicit database named orbita_recovery_*.');
+        if (! $test && ($driver !== 'mysql' || $target === '')) {
+            throw new RecoveryException('Import requires MySQL and an explicit target database name.');
         }
         if ($db->getDatabaseName() !== $target || $db->getTablePrefix() !== '') {
             throw new RecoveryException('Target database differs from the configured connection, or a table prefix is set.');

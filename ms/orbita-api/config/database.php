@@ -1,4 +1,6 @@
 <?php
+$ca = (string) env('MYSQL_ATTR_SSL_CA', '');
+$caPath = $ca === '' || str_starts_with($ca, '/') ? $ca : base_path($ca);
 return [
     'default' => env('DB_CONNECTION', 'mysql'),
     'connections' => [
@@ -9,7 +11,7 @@ return [
             'unix_socket' => env('DB_SOCKET', ''), 'charset' => 'utf8mb4', 'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '', 'prefix_indexes' => true, 'strict' => true, 'engine' => 'InnoDB',
             'options' => extension_loaded('pdo_mysql') && env('MYSQL_ATTR_SSL_CA') ? [
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                PDO::MYSQL_ATTR_SSL_CA => $caPath,
                 PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => true,
             ] : [],
         ],

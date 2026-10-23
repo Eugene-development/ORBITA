@@ -8,6 +8,7 @@ for service in front admin; do
 done
 npm --prefix scripts test
 composer --working-dir=ms/orbita-api test
+composer --working-dir=ms/orbita-db test
 python3 scripts/test-infra.py
 while IFS= read -r file; do bash -n "$file"; done < <(find scripts deploy prod -type f -name '*.sh')
 echo 'Source checks passed. Docker/MySQL and browser checks run separately.'

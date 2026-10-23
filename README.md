@@ -4,7 +4,7 @@
 
 ## Структура
 
-`ms/orbita-front` — публичный сайт; `ms/orbita-admin` — `/admin`; `ms/orbita-api` — модульный монолит. `ms/orbita-db` содержит только снимок каталога и служебные миграции. Каждый Node-сервис содержит собственные `package.json`, `package-lock.json`, `Dockerfile.production` и локальные пакеты `packages/ui`, `packages/contracts`. Сборка не требует корневого npm workspace или исходников соседнего сервиса. `scripts/package.json` содержит только инструменты генерации и сквозных тестов. Файлы локального окружения находятся в `docker/local/`; production-настройки находятся в `prod/<сервис>/`. Инфраструктура повторяет поддерживаемые соглашения PLITKA.
+`ms/orbita-front` — публичный сайт; `ms/orbita-admin` — `/admin`; `ms/orbita-api` — модульный монолит. `ms/orbita-db` — отдельный Laravel 13 сервис со своими Composer-зависимостями, Artisan, миграциями и CSV-импортом; запускается локальным PHP через SSH-туннель, без Docker-образа. См. [инструкцию orbita-db](ms/orbita-db/README.md). Каждый Node-сервис содержит собственные `package.json`, `package-lock.json`, `Dockerfile.production` и локальные пакеты `packages/ui`, `packages/contracts`. Сборка не требует корневого npm workspace или исходников соседнего сервиса. `scripts/package.json` содержит только инструменты генерации и сквозных тестов. Файлы локального окружения находятся в `docker/local/`; production-настройки находятся в `prod/<сервис>/`. Инфраструктура повторяет поддерживаемые соглашения PLITKA.
 
 ## Локальный запуск
 
@@ -14,6 +14,8 @@
 bash scripts/setup.sh
 bash scripts/build.sh local
 bash scripts/local.sh up -d --wait mysql redis mailpit
+# Подготовить ms/orbita-db/.env.local по его примеру и локальным DB-доступам.
+composer install --working-dir=ms/orbita-db
 bash scripts/migrate-services.sh local
 bash scripts/local.sh up -d --wait
 ```
@@ -46,6 +48,8 @@ npm --prefix scripts ci
 bash scripts/check.sh
 composer install --working-dir=ms/orbita-api
 composer test --working-dir=ms/orbita-api
+composer install --working-dir=ms/orbita-db
+composer test --working-dir=ms/orbita-db
 npm --prefix scripts run generate:types
 npm --prefix scripts run test:e2e
 ```

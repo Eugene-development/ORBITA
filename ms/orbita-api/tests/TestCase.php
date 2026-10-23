@@ -16,6 +16,8 @@ abstract class TestCase extends BaseTestCase
                 throw new \RuntimeException('MySQL fixture tests require ORBITA_MYSQL_TESTS=1 and a database named orbita_test_*.');
             }
         }
+        // Synthetic fixtures explicitly load canonical migrations; runtime API never does.
+        $this->app->make('migrator')->path(base_path('../orbita-db/database/migrations'));
         $this->artisan('migrate:fresh', ['--force' => true, '--drop-views' => true])->assertExitCode(0);
         LegacyFixtures::create();
     }

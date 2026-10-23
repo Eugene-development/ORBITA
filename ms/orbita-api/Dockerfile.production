@@ -7,12 +7,8 @@ RUN apk add --no-cache icu-dev libzip-dev oniguruma-dev linux-headers curl fcgi 
 WORKDIR /var/www
 RUN printf 'upload_max_filesize=10M\npost_max_size=12M\n' > /usr/local/etc/php/conf.d/orbita-upload.ini
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
-RUN printf '%s\n' '#!/bin/sh' 'set -eu' \
-  'mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache' \
-  'php artisan package:discover --no-ansi >&2' \
-  'if [ "${APP_ENV:-production}" = "production" ]; then php artisan lighthouse:cache --no-ansi >&2; fi' \
-  'exec "$@"' > /usr/local/bin/orbita-entrypoint \
-  && chmod 755 /usr/local/bin/orbita-entrypoint
+COPY entrypoint.sh /usr/local/bin/orbita-entrypoint
+RUN chmod 755 /usr/local/bin/orbita-entrypoint
 ENTRYPOINT ["/usr/local/bin/orbita-entrypoint"]
 FROM base AS development
 COPY . .
@@ -28,11 +24,14 @@ RUN composer install --no-dev --prefer-dist --no-interaction --no-scripts --no-p
 FROM base AS production
 COPY . .
 COPY --from=dependencies /var/www/vendor ./vendor
+COPY cert/mysql-ca.pem /var/www/cert/mysql-ca.pem
 RUN mkdir -p storage/app/public storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
   && php artisan package:discover --no-ansi \
   && php artisan lighthouse:cache --no-ansi \
   && chown -R www-data:www-data storage bootstrap/cache \
   && printf 'opcache.enable=1\nopcache.validate_timestamps=0\nexpose_php=Off\n' > /usr/local/etc/php/conf.d/orbita.ini
+RUN printf '[www]\nclear_env = no\n' > /usr/local/etc/php-fpm.d/zz-runtime-env.conf
+
 USER www-data
 EXPOSE 9000
 CMD ["php-fpm", "-F"]

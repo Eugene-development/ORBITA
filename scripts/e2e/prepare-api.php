@@ -11,6 +11,7 @@ file_put_contents($database, '');
 require $root.'/ms/orbita-api/vendor/autoload.php';
 $app = require $root.'/ms/orbita-api/bootstrap/app.php';
 $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+$app->make('migrator')->path($root.'/ms/orbita-db/database/migrations');
 Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
 Tests\Support\LegacyFixtures::create();
 Tests\Support\LegacyFixtures::product(1, '449.64', 'шт');

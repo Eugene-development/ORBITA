@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 // Standalone, synthetic, in-memory test: never boots the application or reads .env.
-require __DIR__.'/../../orbita-api/vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Database\Eloquent\Model;

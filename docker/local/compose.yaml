@@ -40,14 +40,6 @@ services:
   scheduler:
     <<: *api
     command: [php, artisan, schedule:work]
-  db:
-    <<: *api
-    profiles: [tools]
-    restart: 'no'
-    volumes:
-      - ../../ms/orbita-db/database/migrations:/migrations:ro
-      - ../../ms/orbita-db/database/schema:/schema:ro
-    command: [php, artisan, migrate, --path=/migrations, --realpath]
   front:
     image: orbita/front:local
     build: {context: ../../ms/orbita-front, dockerfile: Dockerfile.production}

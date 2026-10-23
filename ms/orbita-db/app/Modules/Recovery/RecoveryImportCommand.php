@@ -14,24 +14,21 @@ final class RecoveryImportCommand extends Command
         {directory : Directory containing the original headerless CSV snapshot}
         {--dry-run : Validate and report without writing; no DB connection unless target-database is provided}
         {--reassign-conflicting-image-ids : Keep the first image ID and assign new IDs to later occurrences, only without incoming references}
-        {--target-database= : Exact configured database name (orbita_recovery_*)}';
-    protected $description = 'Restore CSV into an empty offline recovery database; never enables catalog writes';
+        {--target-database= : Exact configured database name; no naming prefix required}';
+    protected $description = 'Restore CSV directly into the empty configured database; never enables catalog writes';
 
     public function handle(MySqlCsvReader $reader, RecoveryImporter $importer): int
     {
         try {
-            $manifestPath = base_path('../orbita-db/database/recovery-manifest.json');
-            if (! is_file($manifestPath)) {
-                $manifestPath = '/recovery-manifest.json'; // Bundled in the orbita-db image.
-            }
+            $manifestPath = database_path('recovery-manifest.json');
             if (! is_readable($manifestPath)) {
-                throw new RecoveryException('Recovery manifest is unavailable. Run from the source checkout or the orbita-db image.');
+                throw new RecoveryException('Recovery manifest is unavailable. Run from the local orbita-db service.');
             }
             $manifest = json_decode(file_get_contents($manifestPath), true, flags: JSON_THROW_ON_ERROR);
             $dataset = RecoveryDataset::load((string) $this->argument('directory'), $manifest, $reader, (bool) $this->option('reassign-conflicting-image-ids'));
             $target = (string) $this->option('target-database');
             if (! $this->option('dry-run') && $target === '') {
-                throw new RecoveryException('An explicit --target-database=orbita_recovery_* is required for import.');
+                throw new RecoveryException('An explicit --target-database=NAME matching the configured database is required for import.');
             }
             $report = $dataset->report;
             $report['mode'] = $this->option('dry-run') ? 'dry-run' : 'import';

@@ -17,15 +17,16 @@ def main():
         project = base / 'project with spaces'
         project.mkdir()
         for directory in ['scripts', 'deploy', 'prod', 'ms/orbita-db']:
-            shutil.copytree(ROOT / directory, project / directory, ignore=shutil.ignore_patterns('.env', '.env.migrate', 'cert', '__pycache__', 'node_modules', 'playwright-report', 'test-results'))
+            shutil.copytree(ROOT / directory, project / directory, ignore=shutil.ignore_patterns('.env', '.env.migrate', 'cert', '__pycache__', 'node_modules', 'playwright-report', 'test-results', 'vendor', 'storage', '.env.local'))
+        manifest = project / 'ms/orbita-api/resources/required-migrations.json'
+        manifest.parent.mkdir(parents=True)
+        shutil.copy2(ROOT / 'ms/orbita-api/resources/required-migrations.json', manifest)
         api = project / 'prod/orbita-api'
         settings = (api / '.env.example').read_text().replace('APP_KEY=\n', 'APP_KEY=base64:' + base64.b64encode(b'f' * 32).decode() + '\n')
         for key, value in [('DB_HOST', 'external-db.example.test'), ('DB_DATABASE', 'fixture_database'), ('DB_USERNAME', 'fixture_runtime'), ('DB_PASSWORD', 'runtime-fixture-secret')]:
             settings = settings.replace(key + '=\n', key + '=' + value + '\n')
         (api / '.env').write_text(settings)
         (api / '.env.migrate').write_text('DB_USERNAME=fixture_migrator\nDB_PASSWORD=migrator-fixture-secret\n')
-        (api / 'cert').mkdir()
-        (api / 'cert/mysql-ca.pem').write_text('test-only-not-a-real-certificate\n')
         for name in ['front', 'admin']:
             folder = project / f'prod/orbita-{name}'
             (folder / '.env').write_text((folder / '.env.example').read_text())
@@ -35,10 +36,11 @@ def main():
         for name in ['app', 'worker', 'scheduler']:
             assert config['services'][name]['environment']['DB_USERNAME'] == 'fixture_runtime'
             assert config['services'][name]['environment']['DB_PASSWORD'] == 'runtime-fixture-secret'
-        assert config['services']['db']['environment']['DB_PASSWORD'] == 'migrator-fixture-secret'
-        for name in ['app', 'worker', 'scheduler', 'db']:
-            assert config['services'][name]['environment']['MYSQL_ATTR_SSL_CA'] == '/run/certs/mysql-ca.pem'
-            assert any(v['target'] == '/run/certs/mysql-ca.pem' and v['read_only'] for v in config['services'][name]['volumes'])
+        assert 'db' not in config['services']
+        assert 'migrator-fixture-secret' not in json.dumps(config)
+        for name in ['app', 'worker', 'scheduler']:
+            assert config['services'][name]['environment']['MYSQL_ATTR_SSL_CA'] == 'cert/mysql-ca.pem'
+            assert not any('mysql-ca.pem' in v['target'] for v in config['services'][name].get('volumes', []))
         # Changing the public domain must also change default SSR destinations.
         for service in ['front', 'admin']:
             folder = project / f'prod/orbita-{service}'
@@ -46,7 +48,7 @@ def main():
             changed = json.loads(subprocess.check_output(['docker', 'compose', '--project-directory', str(folder), '--env-file', str(folder / '.env'), 'config', '--format', 'json'], cwd=base, env=env, text=True))
             assert changed['services']['app']['environment']['ORBITA_API_ORIGIN_INTERNAL'] == 'https://other.example.test'
             assert changed['services']['app']['tmpfs'] == ['/tmp:rw,noexec,nosuid,nodev,mode=1777']
-        print('PASS independent runtime/migration credentials; CA mounts; SSR follows configured domain')
+        print('PASS no migrator in production Compose; CA in image; SSR follows configured domain')
 
         binary = base / 'bin'
         binary.mkdir()
@@ -85,21 +87,17 @@ if args[-1:] == ['db'] and 'run' in args: Path(os.environ['APPLIED']).touch()
         assert len(run('deploy/front.sh', '--no-push')) == 1
         assert len(run('deploy/front.sh', fail='build')) == 1
 
-        calls = run('deploy/db.sh')
-        assert [c['args'][0] for c in calls] == ['build', 'build', 'push']
-        assert calls[-1]['args'] == ['push', 'larux/orbita-db:latest']
-        assert len(run('deploy/db.sh', '--no-push')) == 2
+        assert run('deploy/db.sh', fail='local-only') == []
         builds = run('scripts/build.sh', '--no-push')
-        assert len(builds) == 4
+        assert len(builds) == 3
         for call in builds:
             args = call['args']
             assert args[args.index('--builder') + 1] == 'desktop-linux', args
             assert '--load' in args, args
             context = args[-1]
-            assert context.startswith('ms/orbita-'), args
+            assert context in ['ms/orbita-api', 'ms/orbita-front', 'ms/orbita-admin'], args
             assert args[args.index('-f') + 1] == context + '/Dockerfile.production', args
-        assert len(run('deploy/db.sh', fail='build')) == 1
-        print('PASS db build uses current API prerequisite; only selected db pushed; build failure stops chain')
+        print('PASS only API/front/admin images build; db Docker entrypoint is disabled')
 
         for service in ['front', 'admin', 'api']:
             for action in ['start', 'update', 'stop']:
@@ -112,20 +110,26 @@ if args[-1:] == ['db'] and 'run' in args: Path(os.environ['APPLIED']).touch()
                 assert not any(a in ['--rmi', '-v', '--volumes', 'build'] for c in calls for a in c['args'])
             calls = run(f'prod/orbita-{service}/scripts/update.sh', fail='pull')
             assert not any('up' in c['args'] for c in calls)
-        calls = run('prod/orbita-api/scripts/start.sh', fail='migrate:status')
+        calls = run('prod/orbita-api/scripts/start.sh', fail='orbita:migrations-check')
         assert not any('up' in c['args'] and 'redis' not in c['args'] for c in calls)
-        calls = run('prod/orbita-api/scripts/migrate.sh')
-        assert sum('orbita:catalog-inspect' in c['args'] for c in calls) == 2
-        run('prod/orbita-api/scripts/migrate.sh', fail='fingerprint-change')
-        valid_migration_settings = (api / '.env.migrate').read_text()
-        (api / '.env.migrate').write_text(valid_migration_settings + 'DB_HOST=unrelated-host\n')
-        calls = run('prod/orbita-api/scripts/start.sh', fail='invalid-migration-settings')
-        assert not any('pull' in c['args'] or 'up' in c['args'] or 'run' in c['args'] for c in calls)
-        (api / '.env.migrate').write_text(valid_migration_settings)
-        (api / '.env.migrate').unlink()
-        calls = run('prod/orbita-api/scripts/migrate.sh', fail='missing-migration-settings')
-        assert not any('pull' in c['args'] or 'up' in c['args'] or 'run' in c['args'] for c in calls)
-        print('PASS fixed Compose scope; pull failure stops recreate; pending/fingerprint guards preserved; missing migrator credentials stop before Docker mutation')
+        assert run('prod/orbita-api/scripts/migrate.sh', fail='local-only') == []
+        (api / '.env.migrate').write_text('DB_HOST=unrelated-host\n')
+        run('prod/orbita-api/scripts/start.sh')  # obsolete migrator settings are never consumed
+        runner = project / 'ms/orbita-db'
+        (runner / 'vendor').mkdir()
+        (runner / 'vendor/autoload.php').touch()
+        (runner / '.env').write_text('APP_ENV=production\n')
+        (runner / '.env.local').write_text('APP_ENV=local\n')
+        php = binary / 'php'
+        php.write_text(stub.read_text())
+        php.chmod(0o755)
+        calls = run('scripts/migrate-services.sh', 'production', '--pretend')
+        assert len(calls) == 1 and calls[0]['cwd'] == str(runner)
+        assert calls[0]['args'] == ['artisan', 'orbita:service-migrate', '--pretend']
+        calls = run('scripts/migrate-services.sh', 'local', '--force')
+        assert calls[0]['args'] == ['artisan', '--env=local', 'orbita:service-migrate', '--force']
+        print('PASS local PHP migration runner; no Docker migration calls; server start checks readiness only')
+
 
 
 if __name__ == '__main__':

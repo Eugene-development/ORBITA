@@ -4,7 +4,7 @@
 
 - `ms/orbita-front` и `ms/orbita-admin`: собственные package.json, package-lock.json, node_modules, Dockerfile.production и .dockerignore. Для сборки достаточно содержимого папки выбранного сервиса: `npm ci && npm run build` или `docker build -f Dockerfile.production .`.
 - `ms/orbita-api`: собственные Composer-зависимости и Dockerfile.production.
-- `ms/orbita-db`: Dockerfile.production и служебные миграции. Образ наследует API; deploy/db.sh сначала собирает его, как и прежде.
+- `ms/orbita-db`: самостоятельный Laravel runtime, composer.json/composer.lock, Artisan, миграции и recovery-import. Запуск локальным PHP через SSH-туннель по VPS/18, без Dockerfile, сборки и публикации образа. API не выполняет миграции.
 - `scripts/package.json`: отдельный пакет инструментов генерации контрактов и сквозных тестов. Он не нужен для сборки приложений. Установка: `npm --prefix scripts ci`.
 - `docker/local/`: локальные `compose.yaml`, `.env` и `.env.example`. Команды выполняются через `bash scripts/local.sh …` из корня (или по абсолютному пути из любого каталога). Production использует отдельные настройки в prod.
 

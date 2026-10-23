@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-// Run in a disposable PHP container sharing the network namespace of a disposable MySQL 8.4.
+// Run with native local PHP against a disposable MySQL 8.4 on an explicit loopback test port.
 // Never boots Laravel or reads .env, real CSV, existing databases or production credentials.
-require __DIR__.'/../../orbita-api/vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 use App\Modules\Recovery\MySqlCsvReader;
 use App\Modules\Recovery\RecoveryDataset;
@@ -19,14 +19,17 @@ if (getenv('ORBITA_RECOVERY_MYSQL_TESTS') !== '1') {
 function verify(bool $condition, string $message): void {
     if (! $condition) throw new RuntimeException($message);
 }
-$admin = new PDO('mysql:host=127.0.0.1;port=3306;charset=utf8mb4', 'root', '', [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-$database = 'orbita_recovery_test_'.bin2hex(random_bytes(8));
+$testPort = filter_var(getenv('ORBITA_RECOVERY_MYSQL_TEST_PORT'), FILTER_VALIDATE_INT, ['options' => ['min_range' => 1024, 'max_range' => 65535]]);
+if ($testPort === false) throw new RuntimeException('An explicit disposable loopback MySQL test port is required.');
+$admin = new PDO('mysql:host=127.0.0.1;port='.$testPort.';charset=utf8mb4', 'root', '', [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+// A normal target name proves direct import needs no recovery-specific prefix.
+$database = 'orbita_test_csv_'.bin2hex(random_bytes(8));
 $directory = sys_get_temp_dir().'/'.$database;
 mkdir($directory, 0700);
 $admin->exec('CREATE DATABASE `'.$database.'` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
 try {
     $capsule = new Manager;
-    $capsule->addConnection(['driver' => 'mysql', 'host' => '127.0.0.1', 'port' => 3306, 'database' => $database,
+    $capsule->addConnection(['driver' => 'mysql', 'host' => '127.0.0.1', 'port' => $testPort, 'database' => $database,
         'username' => 'root', 'password' => '', 'prefix' => '', 'charset' => 'utf8mb4', 'collation' => 'utf8mb4_unicode_ci', 'strict' => true, 'engine' => 'InnoDB']);
     $capsule->setAsGlobal();
     $capsule->getContainer()->bind('db.schema', fn () => $capsule->schema());
@@ -64,6 +67,12 @@ try {
     $dataset = RecoveryDataset::load($directory, $manifest, $reader, true);
     $db = $capsule->getConnection();
     $importer = new RecoveryImporter;
+    try {
+        $importer->assertReady($db, $dataset, $database.'_wrong');
+        throw new RuntimeException('Mismatched target name was accepted');
+    } catch (RecoveryException $error) {
+        verify(str_contains($error->getMessage(), 'differs from the configured connection'), 'Unexpected target-name error');
+    }
     $importer->assertReady($db, $dataset, $database);
     // Fractional truncation can be a warning even in strict mode; never accept it.
     $db->statement('ALTER TABLE price MODIFY value DECIMAL(20,1) NOT NULL');
@@ -114,7 +123,21 @@ try {
     } catch (RecoveryException $error) {
         verify(str_contains($error->getMessage(), 'InnoDB'), 'Unexpected engine error');
     }
-    echo "PASS: MySQL 8.4 atomic rollback, conversion-warning rollback, exact decimals/text/NULL/key, image reassignment, AUTO_INCREMENT, repeat refusal and InnoDB guard.\n";
+    $db->statement('ALTER TABLE migrations ENGINE=InnoDB');
+    $fingerprint = new App\Modules\Migrations\CatalogFingerprint;
+    $before = $fingerprint->capture($db);
+    $native = new Symfony\Component\Process\Process([PHP_BINARY, dirname(__DIR__).'/artisan', 'orbita:service-migrate', '--force'], dirname(__DIR__), [
+        'APP_ENV' => 'testing', 'APP_CONFIG_CACHE' => $directory.'/unused-config.php',
+        'DB_CONNECTION' => 'mysql', 'DB_HOST' => '127.0.0.1', 'DB_PORT' => (string) $testPort,
+        'DB_DATABASE' => $database, 'DB_USERNAME' => 'root', 'DB_PASSWORD' => '',
+        'MYSQL_ATTR_SSL_CA' => '', 'ORBITA_CATALOG_WRITES_ENABLED' => 'false',
+    ]);
+    $native->run();
+    verify($native->isSuccessful(), 'Native standalone Artisan migration failed: '.$native->getOutput().$native->getErrorOutput());
+    verify($db->table('orbita_migrations')->count() === 3, 'Native runtime did not apply its canonical migrations');
+    verify($db->getSchemaBuilder()->hasTable('orbita_orders'), 'Native service schema is incomplete');
+    verify($before === $fingerprint->capture($db), 'Native service migrations changed catalogue structure');
+    echo "PASS: native standalone Laravel service migrations, MySQL 8.4 direct import, target-name guard, atomic/conversion-warning rollback, exact decimals/text/NULL/key, image reassignment, AUTO_INCREMENT, repeat refusal and InnoDB guard.\n";
 } finally {
     $admin->exec('DROP DATABASE `'.$database.'`');
     foreach (glob($directory.'/*') as $path) unlink($path);

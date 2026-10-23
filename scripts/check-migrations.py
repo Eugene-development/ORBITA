@@ -1,6 +1,8 @@
 """Static service-table allowlist; integration tests independently verify legacy DDL."""
 from pathlib import Path
 import re
+import json
+import sys
 
 
 def validate(source: str) -> None:
@@ -40,9 +42,17 @@ def validate(source: str) -> None:
 
 if __name__ == '__main__':
     root = Path(__file__).resolve().parents[1]
-    for path in (root / 'ms/orbita-db/database/migrations').glob('*.php'):
+    paths = sorted((root / 'ms/orbita-db/database/migrations').glob('*.php'))
+    for path in paths:
         try:
             validate(path.read_text())
         except ValueError as error:
             raise SystemExit(f'{path.name}: {error}') from None
-    print('All canonical migrations target orbita_ service tables.')
+    manifest = root / 'ms/orbita-api/resources/required-migrations.json'
+    expected = [path.stem for path in paths]
+    if '--write-api-manifest' in sys.argv:
+        manifest.parent.mkdir(parents=True, exist_ok=True)
+        manifest.write_text(json.dumps(expected, indent=2) + '\n')
+    if not manifest.is_file() or json.loads(manifest.read_text()) != expected:
+        raise SystemExit('API migration readiness manifest is stale. Run python3 scripts/check-migrations.py --write-api-manifest.')
+    print('All canonical migrations target orbita_ service tables; API readiness manifest matches.')

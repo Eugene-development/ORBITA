@@ -44,8 +44,8 @@ def validate(env: dict[str, str]) -> None:
     for field in ["APP_KEY", "DB_HOST", "DB_DATABASE", "DB_USERNAME", "DB_PASSWORD"]:
         if any(character in env[field] for character in "\r\n\0"):
             raise ValueError(f"Multiline/zero-byte setting is unsupported: {field}.")
-    if env.get("MYSQL_ATTR_SSL_CA") != "/run/certs/mysql-ca.pem":
-        raise ValueError("Production requires the mounted MySQL CA at /run/certs/mysql-ca.pem.")
+    if env.get("MYSQL_ATTR_SSL_CA") != "cert/mysql-ca.pem":
+        raise ValueError("Production requires the public MySQL CA included in the image at cert/mysql-ca.pem.")
     fingerprint = env.get("ORBITA_SCHEMA_FINGERPRINT", "")
     if fingerprint and not re.fullmatch(r"[a-f0-9]{64}", fingerprint):
         raise ValueError("Invalid approved catalog fingerprint.")

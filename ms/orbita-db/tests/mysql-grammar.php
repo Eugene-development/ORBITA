@@ -1,5 +1,5 @@
 <?php
-require __DIR__.'/../../orbita-api/vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 $container = new Illuminate\Container\Container;
 Illuminate\Support\Facades\Facade::setFacadeApplication($container);
 $conn = new Illuminate\Database\MySqlConnection(function () { throw new RuntimeException('Real database connections are forbidden in grammar test'); }, 'orbita_recovery_test', '', ['version' => '8.0.36', 'charset' => 'utf8mb4', 'collation' => 'utf8mb4_unicode_ci', 'engine' => 'InnoDB']);

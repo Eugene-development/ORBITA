@@ -1,14 +1,16 @@
+> Актуальный порядок Laravel-поставки и локальных миграций: [laravel-deployment.md](laravel-deployment.md).
+
 # ORBITA — самостоятельные папки для VPS
 
 Обновлено 18.10.2026. Общий порядок подготовки сервера, доставки, MySQL, DNS,
 HTTPS и восстановления — [Development/VPS](../../VPS/README.md). Здесь только
-особенности приложения. Требуется Docker Compose v2.24+ (`env_file.required`).
+особенности приложения. Требуется Docker Compose v2.
 
 | Папка | Состав | Порт VPS |
 | --- | --- | --- |
 | `orbita-front` | Витрина SvelteKit + nginx | `127.0.0.1:4151` |
 | `orbita-admin` | Админка `/admin/`, SvelteKit + nginx | `127.0.0.1:4152` |
-| `orbita-api` | Laravel, авторизация, Redis, outbox-worker, scheduler, инструмент миграций | `127.0.0.1:7151` |
+| `orbita-api` | Laravel API, авторизация, Redis, outbox-worker, scheduler; только read-only проверка миграций | `127.0.0.1:7151` |
 | `nginx` | Внешний nginx `orbita.conf` | HTTP/HTTPS сайта |
 
 Каждая папка запускается после распаковки без исходников репозитория. Общего Compose,
@@ -19,9 +21,9 @@ Node/PHP работают с read-only filesystem и прежними огран
 ## Сборка
 
 Фиксированные имена: `larux/orbita-front:latest`, `larux/orbita-admin:latest`,
-`larux/orbita-api:latest`, `larux/orbita-db:latest`. Имена и теги в `.env` не задаются.
+`larux/orbita-api:latest`. Имена и теги в `.env` не задаются.
 
-`deploy/front.sh`, `deploy/admin.sh`, `deploy/api.sh`, `deploy/db.sh` собирают свой
+`deploy/front.sh`, `deploy/admin.sh`, `deploy/api.sh` собирают свой
 сервис из собственного контекста `ms/orbita-<сервис>` и его `Dockerfile.production`. `scripts/build.sh` собирает весь комплект. После успешной сборки образы автоматически отправляются в Docker Hub.
 Для сборки без отправки используйте `--no-push`; прежний `--push` также поддерживается.
 Нужен `docker login` под аккаунтом с правом публикации в `larux`:
@@ -37,12 +39,7 @@ docker login
 
 Сборка использует встроенный Docker builder текущего context (`--builder "$(docker context show)"`) и явно загружает образ (`--load`) перед `docker push`; выбранный пользовательский buildx-builder не влияет на этот сценарий.
 Сборка рассчитана на `linux/amd64`; при необходимости задайте `PLATFORM`.
-Образ db основан на `larux/orbita-api:latest`. При отдельном `deploy/db.sh`
-API сначала собирается из текущих исходников локально, затем собирается db;
-публикуется только выбранный db. Полная сборка использует уже собранный API.
-Он содержит только canonical migrations из `ms/orbita-db/database/migrations` в
-`/migrations`. Legacy recovery, seed и импорт в него не включены.
-Для локальной разработки используйте `scripts/build.sh local`.
+`orbita-db` — самостоятельный локальный Laravel-сервис, без Docker-образа. Он не собирается и не публикуется; старый `deploy/db.sh` завершится с пояснением. Миграции запускаются PHP на Mac через SSH-туннель по [VPS/18](../../VPS/18-local-database.md) и [orbita-db README](../ms/orbita-db/README.md). Для локальной разработки контейнеров используйте `scripts/build.sh local`.
 
 ## Настройки
 
@@ -61,10 +58,8 @@ DB_NETWORK; сама сеть остаётся external в Compose. Loopback и 
 имя обязано совпадать с сертификатом. Не создавайте параллельную БД и не
 переименовывайте действующую инфраструктуру.
 
-Скопируйте публичный CA действующего MySQL в `orbita-api/cert/mysql-ca.pem`.
-Compose монтирует его в `/run/certs/mysql-ca.pem` для API, worker, scheduler и db;
-Laravel проверяет CA и имя сервера. MYSQL_ATTR_SSL_CA уже указан в `.env.example`.
-Приватные ключи MySQL в поставку не входят. До запуска убедитесь, что CA читается UID 82.
+Публичный CA из `ms/orbita-api/cert/mysql-ca.pem` включён в образ.
+`MYSQL_ATTR_SSL_CA=cert/mysql-ca.pem`; доставка CA в серверную папку не нужна.
 
 Подсеть API `172.30.94.0/24` должна быть свободна. При изменении обновите и Compose,
 и `TRUSTED_PROXIES`. Redis внутри API доступен как `redis`; его volume сохраняет
@@ -80,28 +75,37 @@ Laravel проверяет CA и имя сервера. MYSQL_ATTR_SSL_CA уже
 в каталог сохранены. Перестройка поставки не согласует схему и не включает CRUD,
 оплаты, загрузки или demo. Не запускайте legacy/recovery миграции на рабочей БД.
 
-После подтверждённого экспорта, проверки metadata и резервной копии существующей
-БД подготовьте отдельного SQL-пользователя миграций по [VPS/16](../../VPS/16-project-database.md).
-В `orbita-api` скопируйте `.env.migrate.example` в `.env.migrate`, задайте только
-DB_USERNAME и DB_PASSWORD этого аккаунта, права 600. Runtime `.env` остаётся
-с отдельным пользователем без DDL. Мигратор наследует схему, TLS и APP_KEY из `.env`;
-доступы из `.env.migrate` получает только CLI-сервис db. Start/update используют
-этот файл, если он установлен, только для проверки состояния миграций.
+Для миграций используйте отдельного SQL-пользователя `…_migrate` по [VPS/12](../../VPS/12-mysql-server.md) и [VPS/18](../../VPS/18-local-database.md). Доступы, CA и Composer-зависимости находятся **на Mac в `ms/orbita-db`**; runtime на VPS сохраняет аккаунт `…_app` без DDL. `.env.migrate` в серверной поставке больше не используется, migration-сервиса в Compose нет.
 
-Затем выполните отдельный шаг служебных миграций из `/root/Project/ORBITA`:
+На Mac подготовьте самостоятельный runtime по [инструкции orbita-db](../ms/orbita-db/README.md): `composer install`, собственная `.env`, `cert/mysql-ca.pem`, имя `mysql` в hosts и открытый SSH-туннель `127.0.0.1:13306` к MySQL на VPS. Выполняйте миграции из исходников именно выбранного релиза:
 
 ```sh
-./orbita-api/scripts/migrate.sh
+# Mac, отдельная вкладка: оставить SSH-туннель открытым.
+ssh -N -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -L 127.0.0.1:13306:172.30.50.2:3306 root@185.4.66.102
+```
+
+```sh
+# Mac, другая вкладка: локальный PHP, без Docker и серверного CLI.
+cd /Users/Shared/SharedProject/Development/ORBITA/ms/orbita-db
+php artisan config:clear
+php artisan orbita:connection-check
+php artisan migrate:status
+php artisan orbita:service-migrate --pretend
+php artisan orbita:service-migrate
+```
+
+Это параметры инфраструктуры из VPS/18; актуальность IP MySQL проверяется по той инструкции. На чистой базе отсутствие `orbita_migrations` до первого запуска ожидаемо; восстановление 50 legacy-таблиц и CSV выполняется отдельно командами из README `orbita-db`. Не запускать recovery на существующем каталоге.
+
+`orbita:service-migrate` сохраняет проверку структуры несервисных таблиц до и после служебных миграций; CRUD и schema approval не включает. API не регистрирует миграции и отклоняет команды migrate/seed. Start/update проверяют metadata и read-only `orbita:migrations-check` по списку миграций своего релиза, но ничего не применяют. При pending migrations сначала завершите локальный шаг и повторите запуск. После применения миграций **на VPS**:
+
+```sh
+cd /root/Project/ORBITA
 ./orbita-api/scripts/start.sh
 ./orbita-front/scripts/start.sh
 ./orbita-admin/scripts/start.sh
 ```
 
-`migrate.sh` запускает Redis, проверяет fingerprint до и после миграций; изменяются
-только таблицы `orbita_*`. При несовпадении запуск останавливается. Для несовместимых
-изменений заранее остановите приложения и всех писателей. В production должны
-использоваться заранее проверенные образы. Start/update дополнительно проверяют
-metadata и отсутствие pending service migrations; сами миграции они не выполняют.
+Для несовместимых изменений заранее остановить всех писателей. Старый `orbita-api/scripts/migrate.sh` не выполняет Docker/SQL-команд и сообщает о локальном способе запуска. Перед новой сборкой список миграций синхронизируется проверкой `python3 scripts/check-migrations.py`; при добавлении canonical migration выполнить `python3 scripts/check-migrations.py --write-api-manifest` и закоммитить обновлённый read-only manifest API.
 
 Установите `nginx/orbita.conf` в `/etc/nginx/sites-available/orbita`, включите через
 `sites-enabled`, выполните `nginx -t` и reload. Затем включите HTTPS:
@@ -118,7 +122,7 @@ certbot --nginx -d xn----7sbc2ahzelejid.xn--p1ai --redirect
 
 В каждой папке есть `scripts/start.sh`, `scripts/update.sh`, `scripts/stop.sh`.
 Скрипты работают из любого каталога, явно выбирают свою `.env`, Compose и project name;
-унаследованные COMPOSE_PROFILES не включают мигратор при обычном up.
+унаследованные COMPOSE_PROFILES/COMPOSE_FILE не изменяют состав поставки; мигратора в Compose нет.
 Update скачивает и пересоздаёт только сервисы
 своей папки; API также проверяет metadata и миграции. Stop не удаляет volumes.
 При переходе сначала остановите старую поставку, чтобы освободить порты.
@@ -147,7 +151,7 @@ COPYFILE_DISABLE=1 tar --exclude=.DS_Store --exclude='._*' \
   -czf /tmp/orbita-nginx.tar.gz -C prod nginx
 ```
 
-Архивы примера содержат конфигурацию, CA и скрипты; образы, данные и `.env`/`.env.migrate`
+Архивы примера содержат конфигурацию и скрипты; образы, данные и `.env`/`.env.migrate`
 в них не входят. Закрытые настройки доставляйте отдельно либо упакуйте целую
 готовую поставку по [VPS/02](../../VPS/02-delivery.md). Сохраняйте действующие
 серверные настройки и TLS-конфиги при обновлении. Статические проверки: `python3 scripts/test-infra.py`,

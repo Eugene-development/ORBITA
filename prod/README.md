@@ -11,7 +11,6 @@ HTTPS и восстановления — [Development/VPS](../../VPS/README.md)
 | `orbita-front` | Витрина SvelteKit + nginx | `127.0.0.1:4151` |
 | `orbita-admin` | Админка `/admin/`, SvelteKit + nginx | `127.0.0.1:4152` |
 | `orbita-api` | Laravel API, авторизация, Redis, outbox-worker, scheduler; только read-only проверка миграций | `127.0.0.1:7151` |
-| `nginx` | Внешний nginx `orbita.conf` | HTTP/HTTPS сайта |
 
 Каждая папка запускается после распаковки без исходников репозитория. Общего Compose,
 gateway, MySQL и отдельного auth здесь нет. API использует существующую внешнюю БД.
@@ -61,6 +60,10 @@ DB_NETWORK; сама сеть остаётся external в Compose. Loopback и 
 Публичный CA из `ms/orbita-api/cert/mysql-ca.pem` включён в образ.
 `MYSQL_ATTR_SSL_CA=cert/mysql-ca.pem`; доставка CA в серверную папку не нужна.
 
+Compose задаёт `APP_ENV=production`, `APP_DEBUG=false` и московскую таймзону
+`APP_TIMEZONE=Europe/Moscow`, `TZ=Europe/Moscow` для API, worker и scheduler.
+Образ содержит `tzdata`; nginx запускается после успешного healthcheck API.
+
 Подсеть API `172.30.94.0/24` должна быть свободна. При изменении обновите и Compose,
 и `TRUSTED_PROXIES`. Redis внутри API доступен как `redis`; его volume сохраняет
 имя прежней поставки `orbita-production_redis_data`.
@@ -105,26 +108,28 @@ cd /root/Project/ORBITA
 ./orbita-admin/scripts/start.sh
 ```
 
-Для несовместимых изменений заранее остановить всех писателей. Старый `orbita-api/scripts/migrate.sh` не выполняет Docker/SQL-команд и сообщает о локальном способе запуска. Перед новой сборкой список миграций синхронизируется проверкой `python3 scripts/check-migrations.py`; при добавлении canonical migration выполнить `python3 scripts/check-migrations.py --write-api-manifest` и закоммитить обновлённый read-only manifest API.
+Для несовместимых изменений заранее остановить всех писателей. Серверного `scripts/migrate.sh` нет: миграции выполняются только локально из `ms/orbita-db`. Перед новой сборкой список миграций синхронизируется проверкой `python3 scripts/check-migrations.py`; при добавлении canonical migration выполнить `python3 scripts/check-migrations.py --write-api-manifest` и закоммитить обновлённый read-only manifest API.
 
-Установите `nginx/orbita.conf` в `/etc/nginx/sites-available/orbita`, включите через
-`sites-enabled`, выполните `nginx -t` и reload. Затем включите HTTPS:
-
-```sh
-certbot --nginx -d xn----7sbc2ahzelejid.xn--p1ai --redirect
-```
-
-Сохраняйте добавленные Certbot TLS-настройки при следующих обновлениях.
-Маршруты `/auth/`, `/graphql`, `/api/`, `/media/`, `/admin/` сохранены, API readiness
-доступен через `/health/api`. Проверьте также `/health` и `/admin/health`.
+Внешний реверс-прокси настраивается на VPS в `/etc/nginx/sites-available/orbita`
+по [VPS/07](../../VPS/07-project-nginx-checklist.md), HTTPS — по
+[VPS/08](../../VPS/08-certificates.md). Его конфигурация хранится отдельно от поставки приложения.
+При обновлениях сохраняйте рабочие настройки NGINX и Certbot.
+Для действующих URL направьте `/auth/`, `/graphql`, `/api/` и `/media/` на API
+`127.0.0.1:7151`, `/admin/` — на `127.0.0.1:4152`, остальные запросы — на
+витрину `127.0.0.1:4151`. Маршрут `/health/api` направьте на `127.0.0.1:7151/health`.
+Проверьте также `/health` и `/admin/health`.
 
 ## Обновление, остановка и резервные копии
 
-В каждой папке есть `scripts/start.sh`, `scripts/update.sh`, `scripts/stop.sh`.
+В `orbita-api/scripts` четыре файла, как в LEGET: `compose.sh`, `start.sh`, `update.sh`, `stop.sh`.
+Python на VPS для них не требуется. Локальные Python-проверки остаются в корневом `scripts/`;
+проверку настроек перед поставкой выполняйте командой `python3 scripts/check-production.py`.
 Скрипты работают из любого каталога, явно выбирают свою `.env`, Compose и project name;
 унаследованные COMPOSE_PROFILES/COMPOSE_FILE не изменяют состав поставки; мигратора в Compose нет.
 Update скачивает и пересоздаёт только сервисы
-своей папки; API также проверяет metadata и миграции. Stop не удаляет volumes.
+своей папки; API также проверяет metadata командой `orbita:catalog-inspect --check`
+и наличие миграций командой `orbita:migrations-check`. Stop API выполняет `docker compose down`,
+как в LEGET, сохраняя volumes.
 При переходе сначала остановите старую поставку, чтобы освободить порты.
 
 До релиза сохраняйте БД, APP_KEY, настройки провайдеров, Redis и прежние образы.
@@ -147,8 +152,6 @@ for service in front admin api; do
   COPYFILE_DISABLE=1 tar --exclude=.env --exclude=.env.migrate --exclude=.DS_Store --exclude='._*' \
     -czf "/tmp/orbita-${service}.tar.gz" -C prod "orbita-${service}"
 done
-COPYFILE_DISABLE=1 tar --exclude=.DS_Store --exclude='._*' \
-  -czf /tmp/orbita-nginx.tar.gz -C prod nginx
 ```
 
 Архивы примера содержат конфигурацию и скрипты; образы, данные и `.env`/`.env.migrate`

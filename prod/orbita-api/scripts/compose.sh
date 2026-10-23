@@ -11,7 +11,7 @@ else
     exit 1
 fi
 if [[ ! -s .env ]]; then
-    echo "Скопируйте .env.example в .env и заполните настройки" >&2
+    echo "Создайте .env рядом с docker-compose.yml и заполните настройки" >&2
     exit 1
 fi
 COMPOSE+=(--project-name orbita-api --file "$PWD/docker-compose.yml" --env-file "$PWD/.env")

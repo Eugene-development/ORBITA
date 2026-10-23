@@ -22,7 +22,7 @@ def main():
         manifest.parent.mkdir(parents=True)
         shutil.copy2(ROOT / 'ms/orbita-api/resources/required-migrations.json', manifest)
         api = project / 'prod/orbita-api'
-        settings = (api / '.env.example').read_text().replace('APP_KEY=\n', 'APP_KEY=base64:' + base64.b64encode(b'f' * 32).decode() + '\n')
+        settings = (ROOT / 'tests/fixtures/production.env').read_text().replace('APP_KEY=\n', 'APP_KEY=base64:' + base64.b64encode(b'f' * 32).decode() + '\n')
         for key, value in [('DB_HOST', 'external-db.example.test'), ('DB_DATABASE', 'fixture_database'), ('DB_USERNAME', 'fixture_runtime'), ('DB_PASSWORD', 'runtime-fixture-secret')]:
             settings = settings.replace(key + '=\n', key + '=' + value + '\n')
         (api / '.env').write_text(settings)
@@ -110,9 +110,15 @@ if args[-1:] == ['db'] and 'run' in args: Path(os.environ['APPLIED']).touch()
                 assert not any(a in ['--rmi', '-v', '--volumes', 'build'] for c in calls for a in c['args'])
             calls = run(f'prod/orbita-{service}/scripts/update.sh', fail='pull')
             assert not any('up' in c['args'] for c in calls)
-        calls = run('prod/orbita-api/scripts/start.sh', fail='orbita:migrations-check')
-        assert not any('up' in c['args'] and 'redis' not in c['args'] for c in calls)
-        assert run('prod/orbita-api/scripts/migrate.sh', fail='local-only') == []
+        assert {path.name for path in (api / 'scripts').iterdir()} == {'compose.sh', 'start.sh', 'update.sh', 'stop.sh'}
+        for action in ['start', 'update']:
+            for check in ['orbita:catalog-inspect', 'orbita:migrations-check']:
+                calls = run(f'prod/orbita-api/scripts/{action}.sh', fail=check)
+                assert not any('up' in c['args'] and 'redis' not in c['args'] for c in calls)
+            calls = run(f'prod/orbita-api/scripts/{action}.sh')
+            assert any('orbita:catalog-inspect' in c['args'] and '--check' in c['args'] for c in calls)
+        calls = run('prod/orbita-api/scripts/stop.sh')
+        assert any('down' in c['args'] for c in calls)
         (api / '.env.migrate').write_text('DB_HOST=unrelated-host\n')
         run('prod/orbita-api/scripts/start.sh')  # obsolete migrator settings are never consumed
         runner = project / 'ms/orbita-db'

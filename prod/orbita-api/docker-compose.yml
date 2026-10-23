@@ -1,5 +1,87 @@
----
 name: orbita-api
+
+x-runtime: &runtime
+  image: larux/orbita-api:latest
+  restart: unless-stopped
+  env_file:
+    - path: "${ORBITA_PROD_ENV_FILE:-.env}"
+      required: true
+  environment:
+    APP_ENV: production
+    APP_DEBUG: "false"
+    APP_TIMEZONE: Europe/Moscow
+    TZ: Europe/Moscow
+    APP_KEY: "${APP_KEY:?Set the permanent APP_KEY in .env}"
+    DB_DATABASE: "${DB_DATABASE:?Set the actual project database in .env}"
+    DB_USERNAME: "${DB_USERNAME:?Set the actual runtime user in .env}"
+    DB_PASSWORD: "${DB_PASSWORD:?Set DB_PASSWORD in .env}"
+    MYSQL_ATTR_SSL_CA: cert/mysql-ca.pem
+  networks: [default, database]
+  read_only: true
+  cap_drop: [ALL]
+  security_opt:
+    - no-new-privileges:true
+  tmpfs:
+    - "/tmp:rw,noexec,nosuid,nodev,mode=1777"
+    - "/var/www/storage/framework:rw,noexec,nosuid,nodev,uid=82,gid=82,mode=0770"
+    - "/var/www/storage/logs:rw,noexec,nosuid,nodev,uid=82,gid=82,mode=0770"
+    - "/var/www/bootstrap/cache:rw,noexec,nosuid,nodev,uid=82,gid=82,mode=0770"
+  depends_on:
+    redis:
+      condition: service_healthy
+
+services:
+  app:
+    <<: *runtime
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          SCRIPT_NAME=/index.php SCRIPT_FILENAME=/var/www/public/index.php
+          REQUEST_METHOD=GET REQUEST_URI=/health
+          cgi-fcgi -bind -connect 127.0.0.1:9000 | grep -q '"status":"ok"'
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  scheduler:
+    <<: *runtime
+    command: [php, artisan, schedule:work]
+    stop_grace_period: 75s
+
+  worker:
+    <<: *runtime
+    command: [php, artisan, orbita:outbox-work, "--sleep=3"]
+    stop_grace_period: 75s
+
+  nginx:
+    image: nginx:1.28-alpine
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:7151:80"
+    volumes:
+      - type: bind
+        source: ./nginx/backend.conf
+        target: /etc/nginx/conf.d/default.conf
+        read_only: true
+        bind:
+          create_host_path: false
+    depends_on:
+      app:
+        condition: service_healthy
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: [redis-server, "--appendonly", "yes"]
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 10s
+      retries: 10
+    volumes:
+      - redis_data:/data
+
 networks:
   database:
     external: true
@@ -7,184 +89,8 @@ networks:
   default:
     ipam:
       config:
-      - subnet: 172.30.94.0/24
-services:
-  app:
-    cap_drop:
-    - ALL
-    depends_on:
-      redis:
-        condition: service_healthy
-        required: true
-    env_file:
-    - path: "${ORBITA_PROD_ENV_FILE:-.env}"
-      required: true
-    environment:
-      APP_KEY: "${APP_KEY:?Set the permanent APP_KEY in .env}"
-      DB_PASSWORD: "${DB_PASSWORD:?Set DB_PASSWORD in .env}"
-      MYSQL_ATTR_SSL_CA: cert/mysql-ca.pem
-      DB_DATABASE: "${DB_DATABASE:?Set the actual project database in .env}"
-      DB_USERNAME: "${DB_USERNAME:?Set the actual runtime user in .env}"
-    healthcheck:
-      interval: 30s
-      retries: 5
-      start_period: 30s
-      test:
-      - CMD-SHELL
-      - SCRIPT_NAME=/index.php SCRIPT_FILENAME=/var/www/public/index.php REQUEST_METHOD=GET
-        REQUEST_URI=/health cgi-fcgi -bind -connect 127.0.0.1:9000 | grep -q '"status":"ok"'
-      timeout: 10s
-    image: larux/orbita-api:latest
-    networks:
-      database: 
-      default: 
-    read_only: true
-    restart: unless-stopped
-    security_opt:
-    - no-new-privileges:true
-    tmpfs:
-    - "/tmp:rw,noexec,nosuid,nodev,mode=1777"
-    - "/var/www/storage/framework:rw,noexec,nosuid,nodev,uid=82,gid=82,mode=0770"
-    - "/var/www/storage/logs:rw,noexec,nosuid,nodev,uid=82,gid=82,mode=0770"
-    - "/var/www/bootstrap/cache:rw,noexec,nosuid,nodev,uid=82,gid=82,mode=0770"
-    volumes: []
-  nginx:
-    depends_on:
-      app:
-        condition: service_started
-        required: true
-    image: nginx:1.28-alpine
-    ports:
-    - host_ip: 127.0.0.1
-      mode: ingress
-      protocol: tcp
-      published: '7151'
-      target: 80
-    restart: unless-stopped
-    volumes:
-    - bind:
-        create_host_path: true
-      read_only: true
-      source: "./nginx/backend.conf"
-      target: "/etc/nginx/conf.d/default.conf"
-      type: bind
-  redis:
-    command:
-    - redis-server
-    - "--appendonly"
-    - 'yes'
-    healthcheck:
-      interval: 10s
-      retries: 10
-      test:
-      - CMD
-      - redis-cli
-      - ping
-    image: redis:7-alpine
-    restart: unless-stopped
-    volumes:
-    - source: redis_data
-      target: "/data"
-      type: volume
-      volume: {}
-  scheduler:
-    cap_drop:
-    - ALL
-    command:
-    - php
-    - artisan
-    - schedule:work
-    depends_on:
-      redis:
-        condition: service_healthy
-        required: true
-    env_file:
-    - path: "${ORBITA_PROD_ENV_FILE:-.env}"
-      required: true
-    environment:
-      APP_KEY: "${APP_KEY:?Set the permanent APP_KEY in .env}"
-      DB_PASSWORD: "${DB_PASSWORD:?Set DB_PASSWORD in .env}"
-      MYSQL_ATTR_SSL_CA: cert/mysql-ca.pem
-      DB_DATABASE: "${DB_DATABASE:?Set the actual project database in .env}"
-      DB_USERNAME: "${DB_USERNAME:?Set the actual runtime user in .env}"
-    image: larux/orbita-api:latest
-    networks:
-      database: 
-      default: 
-    read_only: true
-    restart: unless-stopped
-    security_opt:
-    - no-new-privileges:true
-    stop_grace_period: 75s
-    tmpfs:
-    - "/tmp:rw,noexec,nosuid,nodev,mode=1777"
-    - "/var/www/storage/framework:rw,noexec,nosuid,nodev,uid=82,gid=82,mode=0770"
-    - "/var/www/storage/logs:rw,noexec,nosuid,nodev,uid=82,gid=82,mode=0770"
-    - "/var/www/bootstrap/cache:rw,noexec,nosuid,nodev,uid=82,gid=82,mode=0770"
-    volumes: []
-  worker:
-    cap_drop:
-    - ALL
-    command:
-    - php
-    - artisan
-    - orbita:outbox-work
-    - "--sleep=3"
-    depends_on:
-      redis:
-        condition: service_healthy
-        required: true
-    env_file:
-    - path: "${ORBITA_PROD_ENV_FILE:-.env}"
-      required: true
-    environment:
-      APP_KEY: "${APP_KEY:?Set the permanent APP_KEY in .env}"
-      DB_PASSWORD: "${DB_PASSWORD:?Set DB_PASSWORD in .env}"
-      MYSQL_ATTR_SSL_CA: cert/mysql-ca.pem
-      DB_DATABASE: "${DB_DATABASE:?Set the actual project database in .env}"
-      DB_USERNAME: "${DB_USERNAME:?Set the actual runtime user in .env}"
-    image: larux/orbita-api:latest
-    networks:
-      database: 
-      default: 
-    read_only: true
-    restart: unless-stopped
-    security_opt:
-    - no-new-privileges:true
-    stop_grace_period: 75s
-    tmpfs:
-    - "/tmp:rw,noexec,nosuid,nodev,mode=1777"
-    - "/var/www/storage/framework:rw,noexec,nosuid,nodev,uid=82,gid=82,mode=0770"
-    - "/var/www/storage/logs:rw,noexec,nosuid,nodev,uid=82,gid=82,mode=0770"
-    - "/var/www/bootstrap/cache:rw,noexec,nosuid,nodev,uid=82,gid=82,mode=0770"
-    volumes: []
+        - subnet: 172.30.94.0/24
+
 volumes:
   redis_data:
     name: orbita-production_redis_data
-x-runtime:
-  cap_drop:
-  - ALL
-  depends_on:
-    redis:
-      condition: service_healthy
-  env_file: "${ORBITA_PROD_ENV_FILE:-.env}"
-  environment:
-    APP_KEY: "${APP_KEY:?Set the permanent APP_KEY in .env}"
-    DB_PASSWORD: "${DB_PASSWORD:?Set DB_PASSWORD in .env}"
-    MYSQL_ATTR_SSL_CA: cert/mysql-ca.pem
-    DB_DATABASE: "${DB_DATABASE:?Set the actual project database in .env}"
-    DB_USERNAME: "${DB_USERNAME:?Set the actual runtime user in .env}"
-  image: larux/orbita-api:latest
-  networks:
-  - default
-  - database
-  read_only: true
-  restart: unless-stopped
-  security_opt:
-  - no-new-privileges:true
-  tmpfs:
-  - "/tmp:rw,noexec,nosuid,nodev,mode=1777"
-  - "/var/www/storage/framework:rw,noexec,nosuid,nodev,uid=82,gid=82,mode=0770"
-  - "/var/www/storage/logs:rw,noexec,nosuid,nodev,uid=82,gid=82,mode=0770"
-  - "/var/www/bootstrap/cache:rw,noexec,nosuid,nodev,uid=82,gid=82,mode=0770"
-  volumes: []

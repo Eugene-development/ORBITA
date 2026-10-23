@@ -60,6 +60,10 @@ def validate(config: dict) -> None:
         if not service.get('read_only') or 'ALL' not in service.get('cap_drop', []) or 'no-new-privileges:true' not in service.get('security_opt', []):
             raise ValueError(f'Production hardening missing: {name}.')
         if bundle == 'api':
+            env = service.get('environment', {})
+            for key, expected in [('APP_ENV', 'production'), ('APP_DEBUG', 'false'), ('APP_TIMEZONE', 'Europe/Moscow'), ('TZ', 'Europe/Moscow')]:
+                if env.get(key) != expected:
+                    raise ValueError(f'Invalid API runtime setting: {name}.{key}.')
             for directory in ['storage/framework', 'storage/logs', 'bootstrap/cache']:
                 mounts = [m for m in service.get('tmpfs', []) if m.startswith('/var/www/' + directory + ':')]
                 if len(mounts) != 1 or not all(option in mounts[0].split(':', 1)[1].split(',') for option in ['uid=82', 'gid=82', 'mode=0770']):
@@ -74,6 +78,8 @@ def validate(config: dict) -> None:
     if bundle == 'api':
         if not services['app'].get('healthcheck'):
             raise ValueError('API readiness check is missing.')
+        if services['nginx'].get('depends_on', {}).get('app', {}).get('condition') != 'service_healthy':
+            raise ValueError('Nginx must wait for API readiness.')
         if not config['networks']['database'].get('external'):
             raise ValueError('Production MySQL must remain external.')
         if services['worker']['command'] != ['php', 'artisan', 'orbita:outbox-work', '--sleep=3'] or services['scheduler']['command'] != ['php', 'artisan', 'schedule:work']:

@@ -3,7 +3,8 @@
 Локальная Compose среда имеет свой MySQL, Redis, Mailpit и loopback порты 4151/4153/4154. `MYSQL_IMAGE` должен совпадать с подтверждённой версией реальной БД для финальных проверок. Setup не импортирует каталог и не выполняет миграции.
 
 Production состоит из самостоятельных папок `prod/orbita-front`, `prod/orbita-admin`,
-`prod/orbita-api` и конфига внешнего nginx. Сборка и запуск используют фиксированные
+`prod/orbita-api`. Внешний реверс-прокси настраивается отдельно на VPS по
+[VPS/07](../../VPS/07-project-nginx-checklist.md). Сборка и запуск используют фиксированные
 `larux/orbita-*:latest`. Порядок настройки, миграций, запуска и архивирования:
 [prod/README.md](../prod/README.md). Runtime backend-секреты находятся только в
 `prod/orbita-api/.env`; front/admin получают собственные публичные настройки.
@@ -23,6 +24,10 @@ Production состоит из самостоятельных папок `prod/o
 Откат: восстановить заранее сохранённые совместимые образы/digest, сохранив APP_KEY, БД, Redis и allocator. Служебные миграции не откатывать автоматически. Несовместимую старую запись не возобновлять.
 
 Обновление поставки 18.10.2026: общий серверный алгоритм — [Development/VPS](../../VPS/README.md).
-MySQL CA передаётся в `prod/orbita-api/cert/mysql-ca.pem`, миграционные доступы и локальный CA —
-в частных `ms/orbita-db/.env` и `ms/orbita-db/cert/mysql-ca.pem` на Mac. В production-поставку они не входят; runtime сохраняет своего SQL-пользователя без DDL.
+Публичный MySQL CA находится в `ms/orbita-api/cert/mysql-ca.pem` и включается в образ
+по пути `/var/www/cert/mysql-ca.pem`, как в LEGET и Megapak. В `prod/orbita-api`
+каталога `cert/` нет; отдельная доставка или mount сертификата на VPS не нужны.
+Миграционные доступы и локальный CA находятся в частных `ms/orbita-db/.env`
+и `ms/orbita-db/cert/mysql-ca.pem` на Mac. В production-поставку они не входят;
+runtime сохраняет своего SQL-пользователя без DDL.
 Подробный порядок и требования к сохранению настроек — в [prod/README.md](../prod/README.md).

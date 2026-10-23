@@ -11,7 +11,7 @@ npm --prefix ms/orbita-front run test
 npm --prefix ms/orbita-front run build
 ```
 
-The development server defaults to `127.0.0.1:4151`. It proxies `/auth`, `/api` and `/graphql` to `ORBITA_API_PROXY` (default `http://127.0.0.1:8000`) and `/admin` to `ORBITA_ADMIN_PROXY` (default `http://127.0.0.1:4152`). Production routing is provided by `prod/nginx/orbita.conf` and the service nginx; the repository gateway is local-only.
+The development server defaults to `127.0.0.1:4151`. It proxies `/auth`, `/api` and `/graphql` to `ORBITA_API_PROXY` (default `http://127.0.0.1:8000`) and `/admin` to `ORBITA_ADMIN_PROXY` (default `http://127.0.0.1:4152`). Production routing uses the host NGINX configured separately on the VPS and each service's container NGINX; see [production setup](../../prod/README.md). The repository gateway is local-only.
 
 ## Runtime configuration
 

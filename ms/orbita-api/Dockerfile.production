@@ -1,6 +1,6 @@
 FROM php:8.4-fpm-alpine AS base
 RUN test "$(id -u www-data)" -eq 82
-RUN apk add --no-cache icu-dev libzip-dev oniguruma-dev linux-headers curl fcgi \
+RUN apk add --no-cache icu-dev libzip-dev oniguruma-dev linux-headers curl fcgi tzdata \
   && docker-php-ext-install pdo_mysql bcmath mbstring intl zip pcntl opcache \
   && apk add --no-cache --virtual .redis-build $PHPIZE_DEPS \
   && pecl install redis && docker-php-ext-enable redis && apk del .redis-build

@@ -22,9 +22,8 @@ runtime/
 
 .artifacts/
 
-# Private VPS settings and public CA copied from infrastructure.
+# Private VPS settings and release archives.
 prod/**/.env.migrate
-prod/**/cert/*.pem
 prod/**/*.tar.gz
 **/__pycache__/
 !**/.env.migrate.example

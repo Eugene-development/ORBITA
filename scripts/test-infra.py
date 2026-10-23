@@ -30,7 +30,7 @@ migration_guard = module("check-migrations")
 
 
 def fixture_env() -> dict[str, str]:
-    values = read_env(ROOT / "prod/orbita-api/.env.example")
+    values = read_env(ROOT / "tests/fixtures/production.env")
     values.update({
         "APP_KEY": "base64:" + base64.b64encode(b"f" * 32).decode(),
         "DB_HOST": "external-db.example.test", "DB_DATABASE": "fixture_database", "DB_USERNAME": "fixture_user",
@@ -200,6 +200,23 @@ class InfrastructureTest(unittest.TestCase):
                         self.assertNotIn(secret, settings)
                 for script in (folder / 'scripts').glob('*.sh'):
                     subprocess.run(['bash', '-n', str(script)], check=True)
+
+    @unittest.skipUnless(shutil.which('docker'), 'Docker CLI absent')
+    def test_api_compose_enforces_production_and_moscow_for_all_php_processes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'dummy.env'
+            values = fixture_env() | {'APP_ENV': 'local', 'APP_DEBUG': 'true', 'APP_TIMEZONE': 'UTC', 'TZ': 'UTC'}
+            path.write_text('\n'.join(f'{key}={value}' for key, value in values.items()) + '\n')
+            config = infrastructure.resolve(path)
+            infrastructure.validate(config)
+            for name in ['app', 'worker', 'scheduler']:
+                settings = config['services'][name]['environment']
+                self.assertEqual(settings['APP_ENV'], 'production')
+                self.assertEqual(settings['APP_DEBUG'], 'false')
+                self.assertEqual(settings['APP_TIMEZONE'], 'Europe/Moscow')
+                self.assertEqual(settings['TZ'], 'Europe/Moscow')
+            self.assertNotIn('healthcheck', config['services']['worker'])
+            self.assertNotIn('healthcheck', config['services']['scheduler'])
 
     @unittest.skipUnless(shutil.which('docker'), 'Docker CLI absent')
     def test_compose_preflight_resolves_explicit_env_file(self):
